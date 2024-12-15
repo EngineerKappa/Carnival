@@ -1,3 +1,3 @@
-XGM bgm_title "title.vgm"
-XGM bgm_cutscene "cutscene.vgm"
-XGM bgm_fjf "fjf.vgm"
+XGM bgm_title "bgm/title.vgm"
+XGM bgm_cutscene "bgm/cutscene.vgm"
+XGM bgm_fjf "bgm/fjf.vgm"

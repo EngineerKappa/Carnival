@@ -7,24 +7,30 @@ u8 palcycle_wait;
 bool palcycle_bg_enabled;
 u16 palette[64];
 
+
 void BG_init()
 {
 	background_x = 0;
 	background_y = 0;
-	VRAM_ind = 1;
+	VRAM_ind = TILE_USER_INDEX;
 	BG_VRAM_ind = 1;
-	portrait_VRAM_ind = 1;
-	PAL_setColors(PAL1*16,palette_black,16,DMA);
-	memset(scroll_data_b, 0, sizeof(scroll_data_b));
-	VDP_setScrollingMode(HSCROLL_TILE,VSCROLL_PLANE);
+	FG_VRAM_ind = 1;
+
+	BG_load();
 }
 
-
-void loadBackground(Image image)
+void BG_load()
 {
-	PAL_fadeInPalette(1,image.palette->data,30,TRUE);
-	VDP_drawImageEx(BG_B, &image, TILE_ATTR_FULL(PAL1, false, false, false, BG_VRAM_ind),0,0,false,TRUE);
-	VRAM_ind = BG_VRAM_ind+image.tileset->numTile;
-	portrait_VRAM_ind=VRAM_ind;
-	waitMs(800);
+	PAL_setPalette(PAL1, canyon_palette.data, DMA);
+	//Load BG Tiles
+	BG_VRAM_ind=VRAM_ind;
+	VDP_loadTileSet(&canyon_bg_tileset, BG_VRAM_ind, DMA);
+	VRAM_ind += canyon_bg_tileset.numTile;
+	//Load FG Tiles
+	FG_VRAM_ind = VRAM_ind;
+	VDP_loadTileSet(&canyon_tileset, FG_VRAM_ind, DMA);
+	VRAM_ind += canyon_tileset.numTile;
+	//Load Tilemaps
+	bgb = MAP_create(&canyon_bg_map, BG_B, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, BG_VRAM_ind));
+	bga = MAP_create(&canyon_map, BG_A, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, FG_VRAM_ind));
 }
