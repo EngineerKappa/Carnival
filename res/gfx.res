@@ -13,5 +13,5 @@ MAP canyon_bg_map "map/canyonbg.png" canyon_bg_tileset BEST 0
 
 PALETTE canyon_palette "map/canyon1.png"
 
-SPRITE  spr_swordsman    "gfx/swordsman.png" 2 2 BEST 6
-SPRITE  spr_yorb    "gfx/yorb.png" 2 2 BEST 10
+SPRITE  spr_swordsman    "gfx/swordsman.png" 2 2 BEST 0
+SPRITE  spr_yorb    "gfx/yorb.png" 2 2 NONE 10

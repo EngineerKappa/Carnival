@@ -9,8 +9,7 @@ u16 cursor_y;
 
 Sprite* s_mouse_cursor;
 
-void input_update_pressed();
-void input_update();
+void input_update(u16 joy, u16 changed, u16 state);
 bool inputConfirm();
 bool inputConfirmPressed();
 bool inputBack();

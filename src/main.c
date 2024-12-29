@@ -16,6 +16,9 @@ void run_turn()
 
 int main()
 {
+	JOY_init();
+	JOY_setEventHandler(&input_update);
+	
 	SPR_init();
 	XGM_startPlay(bgm_cutscene);
 	PAL_setPalette(PAL0, frame.palette->data, DMA);
