@@ -21,7 +21,7 @@ void BG_init()
 
 void BG_load()
 {
-	PAL_setPalette(PAL1, canyon_palette.data, DMA);
+	PAL_setPalette(PAL2, canyon_palette.data, DMA);
 	//Load BG Tiles
 	BG_VRAM_ind=VRAM_ind;
 	VDP_loadTileSet(&canyon_bg_tileset, BG_VRAM_ind, DMA);
@@ -31,6 +31,6 @@ void BG_load()
 	VDP_loadTileSet(&canyon_tileset, FG_VRAM_ind, DMA);
 	VRAM_ind += canyon_tileset.numTile;
 	//Load Tilemaps
-	bgb = MAP_create(&canyon_bg_map, BG_B, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, BG_VRAM_ind));
-	bga = MAP_create(&canyon_map, BG_A, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, FG_VRAM_ind));
+	bgb = MAP_create(&canyon_bg_map, BG_B, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind));
+	bga = MAP_create(&canyon_map, BG_A, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, FG_VRAM_ind));
 }

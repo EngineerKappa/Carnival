@@ -1,4 +1,5 @@
 PALETTE palette_all "gfx/font.png"
+PALETTE pal_swordsman "gfx/swordsman.png"
 IMAGE custom_font  "gfx/font.png" BEST NONE
 
 #IMAGE bg_nohbodee "gfx/nohbodee.png" BEST ALL
@@ -12,4 +13,5 @@ MAP canyon_bg_map "map/canyonbg.png" canyon_bg_tileset BEST 0
 
 PALETTE canyon_palette "map/canyon1.png"
 
-
+SPRITE  spr_swordsman    "gfx/swordsman.png" 2 2 BEST 6
+SPRITE  spr_yorb    "gfx/yorb.png" 2 2 BEST 10
