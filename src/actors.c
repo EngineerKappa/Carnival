@@ -1,16 +1,31 @@
 #include <genesis.h>
 #include <gfx.h>
 #include <actors.h>
+#include <background.h>
 
 void actor_sprite_init()
 {
     sprite_index_yorb=SPR_loadAllFrames(&spr_yorb,TILE_SPRITE_INDEX+32,NULL);
 }
 
+void player_collect_item()
+{
+    u8 i;
+    for(i = 0; i < MAX_ACTORS; i++)
+    {
+        
+        Actor* a = &actors[i];
+        if ((a->type == OBJ_YORB) && a->x == player->x && a->y == player->y)
+        {
+            actor_free(a);
+        }
+    }
+}
+
 void actors_init(){
     actors_spawned=0;
+    turn_updated=false;
     actor_sprite_init();
-
     
     player_init();
 
@@ -28,8 +43,6 @@ void actors_init(){
 
             }
     }
-
-
 }
 
 
@@ -47,6 +60,7 @@ void actor_set_defaults(Actor *a)
     a->hflip = false;
     a->vflip = false;
     a->sprite = NULL;
+    a->act_step_start = NULL;
 }
 
 void player_init(){
@@ -59,14 +73,15 @@ void player_init(){
     pl->hflip = false;
     pl->vflip = false;
     pl->sprite = SPR_addSprite(&spr_swordsman,pl->x * 16 ,pl->y * 16,TILE_ATTR(PAL1,0,FALSE,pl->hflip));
-    
-    actors_spawned=0;
+    pl->act_step_start = &actor_step_test;
+    actors_spawned=1;
+    player = pl;
 }
 
 void spawn_yorb(int spawn_x,int spawn_y)
 {
 
-    Actor *a = &actors[actors_spawned];
+    Actor *a = &actors[actor_find_empty_slot()];
     actor_set_defaults(a);
     
     a->type = OBJ_YORB;
@@ -75,7 +90,7 @@ void spawn_yorb(int spawn_x,int spawn_y)
 
     a->sprite = SPR_addSprite(&spr_yorb,a->x * 16 ,a->y * 16,TILE_ATTR(PAL0,0,FALSE,a->hflip));
     SPR_setAutoTileUpload(a->sprite, FALSE);
-    s16 frame = (((a->x + a->y)/2) % 4);
+    s16 frame = (((a->x + a->y)) % 4);
     SPR_setFrame(a->sprite,frame);
     SPR_setFrameChangeCallback(a->sprite, &yorb_animate);
     
@@ -91,11 +106,11 @@ void yorb_animate(Sprite* sprite)
 
 u8 actor_find_empty_slot()
 {
-    Actor* e = actors;
     u8 i;
     for(i = 0; i < MAX_ACTORS; i++)
     {
-        if (e->type == OBJ_EMPTY)
+        Actor* a = &actors[i];
+        if (a->type == OBJ_EMPTY)
         {
             return (i);
         }
@@ -104,6 +119,27 @@ u8 actor_find_empty_slot()
 }
 
 void actor_free(Actor* a){
+    SPR_releaseSprite(a->sprite);
     actor_set_defaults(a);
-	SPR_setVisibility(a->sprite,HIDDEN);
+    actors_spawned--;
+    
+}
+
+void actor_step_test(Actor* a)
+{
+    a->x=a->target_x;
+    a->y=a->target_y;
+    SPR_setPosition(a->sprite,a->x * 16,a->y * 16);
+    player_collect_item();
+}
+
+void actors_update()
+{
+    u8 i;
+    for(i = 0; i < MAX_ACTORS; i++)
+    {
+        Actor* a = &actors[i];
+        if ((a->type != OBJ_EMPTY) && (a->act_step_start!=NULL))
+        a->act_step_start(a);
+    }
 }
