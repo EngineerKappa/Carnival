@@ -15,6 +15,11 @@ enum
 struct Actor;
 typedef void (*FunctionPointer)(struct Actor*);
 
+#define DIR_RIGHT 1
+#define DIR_UP 2
+#define DIR_LEFT 3
+#define DIR_DOWN 4
+
 typedef struct Actor {
     u8 type;
     int x, y;
@@ -41,13 +46,13 @@ void yorb_animate(Sprite* sprite);
 
 u8 actor_find_empty_slot();
 void actor_free(Actor* a);
-void player_init();
+
 void spawn_yorb(int spawn_x,int spawn_y);
 void actors_update();
 void actors_init();
 
-void actor_step_test(Actor* a);
-void player_collect_item();
+void actor_move(Actor* a);
+void actor_turn(Actor* a);
 void actors_update();
 
 bool turn_updated;

@@ -18,6 +18,7 @@
     "string.h": "c",
     "xlocale": "c",
     "shared.h": "c",
-    "actors.h": "c"
+    "actors.h": "c",
+    "player.h": "c"
 }
 }

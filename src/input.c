@@ -2,14 +2,15 @@
 #include <input.h>
 #include <gfx.h>
 #include <actors.h>
+#include <player.h>
 
 void run_turn()
 {
-	if (player_check_turn() && ((turn_updated==false) | (delayed_auto_shift >= AUTO_SHIFT_LIMIT) ))
+	if (input_player_check() && ((turn_updated==false) | (delayed_auto_shift >= AUTO_SHIFT_LIMIT) ))
 	{
 		if (delayed_auto_shift >= AUTO_SHIFT_LIMIT)
 			delayed_auto_shift = AUTO_SHIFT_RESTART;
-		
+
 		actors_update();
 		turn_updated=true;
 
@@ -21,7 +22,6 @@ void run_turn()
 		{
 			player->frame = 0;
 		}
-
 	}
 
 	if (joypad_data==0)
@@ -43,10 +43,9 @@ void input_update(u16 joy, u16 changed, u16 state)
 	joypad_data = state;
 }
 
-bool player_check_turn()
+bool input_player_check()
 {
 	u8 dir = NULL;
-
 	if (joypad_data & BUTTON_RIGHT)
 		dir = DIR_RIGHT;
 	if (joypad_data & BUTTON_UP)
@@ -61,38 +60,8 @@ bool player_check_turn()
 		return false;
 	}	
 	delayed_auto_shift++;
-	
 	player->facing_dir=dir;
-	player->target_x=player->x;
-	player->target_y=player->y;
-	
-	
-
-	switch (dir) 
-	{
-		case DIR_RIGHT:
-			player->target_x=player->x+1;
-			SPR_setAnimAndFrame(player->sprite, 1, player->frame);
-			SPR_setHFlip(player->sprite,false);
-			break;
-		case DIR_UP:
-			player->target_y=player->y-1;
-			SPR_setAnimAndFrame(player->sprite, 2, player->frame);
-			SPR_setHFlip(player->sprite,false);
-			break;
-		case DIR_DOWN:
-			player->target_y=player->y+1;
-			SPR_setAnimAndFrame(player->sprite, 0, player->frame);
-			SPR_setHFlip(player->sprite,false);
-			break;
-		case DIR_LEFT:
-			player->target_x=player->x-1;
-			SPR_setAnimAndFrame(player->sprite, 1, player->frame);
-			SPR_setHFlip(player->sprite,true);
-			break;
-	}
-	
-
+	actor_turn(player);
 	return true;
 }
 

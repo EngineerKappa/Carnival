@@ -2,31 +2,17 @@
 #include <gfx.h>
 #include <actors.h>
 #include <background.h>
+#include <player.h>
 
 void actor_sprite_init()
 {
     sprite_index_yorb=SPR_loadAllFrames(&spr_yorb,TILE_SPRITE_INDEX+32,NULL);
 }
 
-void player_collect_item()
-{
-    u8 i;
-    for(i = 0; i < MAX_ACTORS; i++)
-    {
-        
-        Actor* a = &actors[i];
-        if ((a->type == OBJ_YORB) && a->x == player->x && a->y == player->y)
-        {
-            actor_free(a);
-        }
-    }
-}
-
 void actors_init(){
     actors_spawned=0;
     turn_updated=false;
     actor_sprite_init();
-    
     player_init();
 
     int spawn_x = 0;
@@ -44,7 +30,6 @@ void actors_init(){
             }
     }
 }
-
 
 void actor_set_defaults(Actor *a)
 {
@@ -64,20 +49,75 @@ void actor_set_defaults(Actor *a)
     a->act_step_start = NULL;
 }
 
-void player_init(){
-    //The player should be spawned first
-    Actor *pl = &actors[0];
-    pl->x = 0;
-    pl->y = 0;
-    pl->type = OBJ_PLAYER;
-    pl->state=0;
-    pl->frame=0;
-    pl->hflip = false;
-    pl->vflip = false;
-    pl->sprite = SPR_addSprite(&spr_swordsman,WINDOW_X+pl->x * 16 ,WINDOW_Y+pl->y * 16,TILE_ATTR(PAL1,0,FALSE,pl->hflip));
-    pl->act_step_start = actor_step_test;
-    actors_spawned=1;
-    player = pl;
+u8 actor_find_empty_slot()
+{
+    u8 i;
+    for(i = 0; i < MAX_ACTORS; i++)
+    {
+        Actor* a = &actors[i];
+        if (a->type == OBJ_EMPTY)
+        {
+            return (i);
+        }
+    }
+    return (MAX_ACTORS-1);
+}
+
+void actor_free(Actor* a)
+{
+    SPR_releaseSprite(a->sprite);
+    actor_set_defaults(a);
+    actors_spawned--;
+}
+
+void actors_update()
+{
+    u8 i;
+    for(i = 0; i < MAX_ACTORS; i++)
+    {
+        Actor* a = &actors[i];
+        if ((a->type != OBJ_EMPTY) && (a->act_step_start!=NULL))
+        a->act_step_start(a);
+    }
+}
+
+void actor_turn(Actor* a)
+{
+	a->target_x=a->x;
+	a->target_y=a->y;
+
+	switch (a->facing_dir) 
+	{
+		case DIR_RIGHT:
+			a->target_x=a->x+1;
+			SPR_setAnimAndFrame(player->sprite, 1, player->frame);
+			SPR_setHFlip(player->sprite,false);
+			break;
+		case DIR_UP:
+			a->target_y=a->y-1;
+			SPR_setAnimAndFrame(a->sprite, 2, a->frame);
+			SPR_setHFlip(a->sprite,false);
+			break;
+		case DIR_DOWN:
+			a->target_y=a->y+1;
+			SPR_setAnimAndFrame(a->sprite, 0, a->frame);
+			SPR_setHFlip(a->sprite,false);
+			break;
+		case DIR_LEFT:
+			a->target_x=a->x-1;
+			SPR_setAnimAndFrame(a->sprite, 1, a->frame);
+			SPR_setHFlip(a->sprite,true);
+			break;
+	}
+}
+
+void actor_move(Actor* a)
+{
+    a->x=a->target_x;
+    a->y=a->target_y;
+    a->x=clamp(a->x,0,ROOM_SIZE);
+	a->y=clamp(a->y,0,ROOM_SIZE);
+    SPR_setPosition(a->sprite,WINDOW_X+a->x * 16,WINDOW_Y+a->y * 16);
 }
 
 void spawn_yorb(int spawn_x,int spawn_y)
@@ -105,44 +145,7 @@ void yorb_animate(Sprite* sprite)
     SPR_setVRAMTileIndex(sprite,tileIndex);
 }
 
-u8 actor_find_empty_slot()
-{
-    u8 i;
-    for(i = 0; i < MAX_ACTORS; i++)
-    {
-        Actor* a = &actors[i];
-        if (a->type == OBJ_EMPTY)
-        {
-            return (i);
-        }
-    }
-    return (MAX_ACTORS-1);
-}
 
-void actor_free(Actor* a){
-    SPR_releaseSprite(a->sprite);
-    actor_set_defaults(a);
-    actors_spawned--;
-    
-}
 
-void actor_step_test(Actor* a)
-{
-    a->x=a->target_x;
-    a->y=a->target_y;
-    player->x=clamp(player->x,0,ROOM_SIZE);
-	player->y=clamp(player->y,0,ROOM_SIZE);
-    SPR_setPosition(a->sprite,WINDOW_X+a->x * 16,WINDOW_Y+a->y * 16);
-    player_collect_item();
-}
 
-void actors_update()
-{
-    u8 i;
-    for(i = 0; i < MAX_ACTORS; i++)
-    {
-        Actor* a = &actors[i];
-        if ((a->type != OBJ_EMPTY) && (a->act_step_start!=NULL))
-        a->act_step_start(a);
-    }
-}
+
