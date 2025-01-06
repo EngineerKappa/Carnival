@@ -10,11 +10,11 @@
 
 void game_init()
 {
-    //BG_display_frame();
+    BG_display_frame();
     PAL_setPalette(PAL1, spr_swordsman.palette->data, DMA);
     actors_init();
     func_update=game_update;
-    XGM_startPlay(bgm_fjf);
+    //XGM_startPlay(bgm_fjf);
 }
 
 void game_update()

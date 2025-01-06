@@ -10,8 +10,8 @@ const ROMHeader rom_header = {
     "SEGA MEGA DRIVE ",
 #endif
     "(C)ENGINEERKAPPA",
-    "SCRUFFY IN CARNIVAL OF ILLUSION                 ",
-    "SCRUFFY IN CARNIVAL OF ILLUSION                 ",
+    "SUPER FREAKS PRESENTS: SWORDSMAZE               ",
+    "SUPER FREAKS PRESENTS: SWORDSMAZE               ",
     "GM 00000000-00",
     0x000,
     "JD              ",
@@ -28,6 +28,6 @@ const ROMHeader rom_header = {
     0x00200000,
     0x0020FFFF,
     "            ",
-    "SCRUFFY IN CARNIVAL OF ILLUSION         ",
+    "SUPER FREAKS PRESENTS: SWORDSMAZE       ",
     "JUE             "
 };

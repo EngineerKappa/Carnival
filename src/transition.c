@@ -96,20 +96,8 @@ void transition_animate_exit()
         {
             y=28-transition_scroll;
         }
-            if ((i>1 && i<1+ROOM_SIZE) && (y>1 && y<1+ROOM_SIZE))
-            {
-                tile1=0;
-                tile2=0;
-            }
-            else
-            {
-                tile1 = bga->baseTile+MAP_getTile(bga,i,y);
-                tile2 = bga->baseTile+MAP_getTile(bga,i,y+1);
-            }
-
-            
-            VDP_setTileMapXY(BG_A, tile1,i,y);
-            VDP_setTileMapXY(BG_A, tile2,i,y+1);
+            VDP_setTileMapXY(BG_A, 0,i,y);
+            VDP_setTileMapXY(BG_A, 0,i,y+1);
     }
     
     i++;

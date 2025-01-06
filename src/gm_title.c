@@ -15,7 +15,7 @@ void title_init()
     VDP_drawTextBG(BG_B,"Characters by SuperFreaksDev",2,25);
     VDP_drawTextBG(BG_B,"Made for FreakJam 2025",2,26);
 
-    XGM_startPlay(bgm_title);
+    //XGM_startPlay(bgm_title);
     func_update=title_update;
 }
 
