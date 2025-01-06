@@ -3,6 +3,9 @@ PALETTE pal_swordsman "gfx/swordsman.png"
 IMAGE custom_font  "gfx/font.png" BEST NONE
 
 #IMAGE bg_nohbodee "gfx/nohbodee.png" BEST ALL
+TILESET ui_tileset "map/uiframe.png" BEST
+MAP ui_map "map/uiframe.png" ui_tileset BEST
+
 IMAGE frame "gfx/textboxframe.png" BEST ALL
 
 TILESET canyon_tileset "map/canyon1.png" BEST

@@ -28,9 +28,9 @@ void BG_load()
 	VRAM_ind += canyon_bg_tileset.numTile;
 	//Load FG Tiles
 	FG_VRAM_ind = VRAM_ind;
-	VDP_loadTileSet(&canyon_tileset, FG_VRAM_ind, DMA);
-	VRAM_ind += canyon_tileset.numTile;
+	VDP_loadTileSet(&ui_tileset, FG_VRAM_ind, DMA);
+	VRAM_ind += ui_tileset.numTile;
 	//Load Tilemaps
 	bgb = MAP_create(&canyon_bg_map, BG_B, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind));
-	bga = MAP_create(&canyon_map, BG_A, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, FG_VRAM_ind));
+	bga = MAP_create(&ui_map, BG_A, TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, FG_VRAM_ind));
 }

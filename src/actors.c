@@ -29,16 +29,16 @@ void actors_init(){
     
     player_init();
 
-    int spawn_x = 2;
-    int spawn_y = 6;
+    int spawn_x = 0;
+    int spawn_y = 3;
     u8 i;
     for(i = 0; actors_spawned < MAX_ACTORS; i++)
     {
             spawn_yorb(spawn_x,spawn_y);
             spawn_x ++;
-            if (spawn_x > 16)
+            if (spawn_x > 11)
             {
-                spawn_x = 2;
+                spawn_x = 0;
                 spawn_y ++;
 
             }
@@ -56,6 +56,7 @@ void actor_set_defaults(Actor *a)
     a->scroll_x = 0;
     a->scroll_y = 0;
     a->state = 0;
+    a->frame = 0;
     a->timer = 0;
     a->hflip = false;
     a->vflip = false;
@@ -66,14 +67,15 @@ void actor_set_defaults(Actor *a)
 void player_init(){
     //The player should be spawned first
     Actor *pl = &actors[0];
-    pl->x = 4;
-    pl->y = 4;
+    pl->x = 0;
+    pl->y = 0;
     pl->type = OBJ_PLAYER;
     pl->state=0;
+    pl->frame=0;
     pl->hflip = false;
     pl->vflip = false;
-    pl->sprite = SPR_addSprite(&spr_swordsman,pl->x * 16 ,pl->y * 16,TILE_ATTR(PAL1,0,FALSE,pl->hflip));
-    pl->act_step_start = &actor_step_test;
+    pl->sprite = SPR_addSprite(&spr_swordsman,WINDOW_X+pl->x * 16 ,WINDOW_Y+pl->y * 16,TILE_ATTR(PAL1,0,FALSE,pl->hflip));
+    pl->act_step_start = actor_step_test;
     actors_spawned=1;
     player = pl;
 }
@@ -88,12 +90,11 @@ void spawn_yorb(int spawn_x,int spawn_y)
     a->x = spawn_x;
     a->y = spawn_y;
 
-    a->sprite = SPR_addSprite(&spr_yorb,a->x * 16 ,a->y * 16,TILE_ATTR(PAL0,0,FALSE,a->hflip));
+    a->sprite = SPR_addSprite(&spr_yorb,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16,TILE_ATTR(PAL0,0,FALSE,a->hflip));
     SPR_setAutoTileUpload(a->sprite, FALSE);
     s16 frame = (((a->x + a->y)) % 4);
     SPR_setFrame(a->sprite,frame);
     SPR_setFrameChangeCallback(a->sprite, &yorb_animate);
-    
     yorb_animate(a->sprite);
     actors_spawned++;
 }
@@ -129,7 +130,9 @@ void actor_step_test(Actor* a)
 {
     a->x=a->target_x;
     a->y=a->target_y;
-    SPR_setPosition(a->sprite,a->x * 16,a->y * 16);
+    player->x=clamp(player->x,0,ROOM_SIZE);
+	player->y=clamp(player->y,0,ROOM_SIZE);
+    SPR_setPosition(a->sprite,WINDOW_X+a->x * 16,WINDOW_Y+a->y * 16);
     player_collect_item();
 }
 

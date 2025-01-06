@@ -13,8 +13,9 @@ enum
 };
 
 struct Actor;
+typedef void (*FunctionPointer)(struct Actor*);
 
-typedef struct {
+typedef struct Actor {
     u8 type;
     int x, y;
     int target_x, target_y;
@@ -24,8 +25,9 @@ typedef struct {
     u16 timer;
     Sprite* sprite;
     bool hflip, vflip;
-    void (*act_step_start)(struct Actor*);
-    void (*act_step_finish)(struct Actor*);
+    u8 frame;
+    FunctionPointer act_step_start;
+    FunctionPointer act_step_finish;
 } Actor;
 
 Actor *player;
