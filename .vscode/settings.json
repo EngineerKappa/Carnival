@@ -20,6 +20,10 @@
     "shared.h": "c",
     "actors.h": "c",
     "player.h": "c",
-    "game.h": "c"
+    "game.h": "c",
+    "system.h": "c",
+    "gm_game.h": "c",
+    "gm_title.h": "c",
+    "transition.h": "c"
 }
 }

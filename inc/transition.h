@@ -1,0 +1,9 @@
+u8 transition_scroll;
+u8 transition_gm;
+u8 transition_state;
+void (*transition_callback)();
+void transition_init();
+void transition_start();
+void transition_animate_enter();
+void transition_animate_exit();
+void transition_animate();

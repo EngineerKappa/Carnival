@@ -25,7 +25,13 @@ void BG_load_frame()
 	FG_VRAM_ind = VRAM_ind;
 	VDP_loadTileSet(&ui_tileset, FG_VRAM_ind, DMA);
 	VRAM_ind += ui_tileset.numTile;
-	//Load Tilemaps
 	bga = MAP_create(&ui_map, BG_A, TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, FG_VRAM_ind));
-	MAP_scrollTo(bga, 0,0);
+	//Load Tilemaps
+	
+}
+
+void BG_display_frame()
+{
+	//bga = MAP_create(&ui_map, BG_A, TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, FG_VRAM_ind));
+	//MAP_scrollTo(bga, 0,0);
 }

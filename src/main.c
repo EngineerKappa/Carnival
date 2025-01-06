@@ -1,24 +1,25 @@
 #include <genesis.h>
 #include <sound.h>
 #include <gfx.h>
-#include <game.h>
+#include <system.h>
+#include <gm_game.h>
 #include <background.h>
 #include <input.h>
 #include <actors.h>
+#include <transition.h>
+
 
 int main()
 {
-	JOY_init();
-	SPR_init();
-	VDP_loadFont(custom_font.tileset, DMA);
-	
-	game_init();
-
+	system_init();
 	while(1)
-	{        
-		run_turn();
+	{     
+		transition_animate();
+		system_update();   
 		SPR_update();
+		
 		SYS_doVBlankProcess();
+		
 	}
 	return (0);
 }

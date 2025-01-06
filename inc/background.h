@@ -16,6 +16,7 @@ Map* bgb;
 
 void BG_init();
 void BG_load_frame();
+void BG_display_frame();
 
 
 #endif // _BACKGROUND_H_
