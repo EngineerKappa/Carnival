@@ -31,7 +31,6 @@ void run_turn()
 	}
 }
 
-
 void input_init()
 {
 	delayed_auto_shift=0;

@@ -15,7 +15,7 @@ Map* bga;
 Map* bgb;
 
 void BG_init();
-void BG_load();
+void BG_load_frame();
 
 
 #endif // _BACKGROUND_H_
