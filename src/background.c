@@ -33,4 +33,5 @@ void BG_load_frame()
 void BG_display_frame()
 {
 	MAP_scrollTo(bgb, 0,0);
+	SYS_doVBlankProcess(); // This feels hacky but we need to update the tilemap before we can draw new stuff to the tilemap
 }

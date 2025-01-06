@@ -14,21 +14,6 @@ void actors_init(){
     turn_updated=false;
     actor_sprite_init();
     player_init();
-
-    int spawn_x = 0;
-    int spawn_y = 3;
-    u8 i;
-    for(i = 0; actors_spawned < MAX_ACTORS; i++)
-    {
-            spawn_yorb(spawn_x,spawn_y);
-            spawn_x ++;
-            if (spawn_x > 11)
-            {
-                spawn_x = 0;
-                spawn_y ++;
-
-            }
-    }
 }
 
 void actor_set_defaults(Actor *a)

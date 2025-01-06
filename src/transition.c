@@ -2,6 +2,7 @@
 #include <system.h>
 #include <transition.h>
 #include <background.h>
+#include <room.h>
 
 void transition_init()
 {
@@ -63,6 +64,8 @@ void transition_animate_enter()
     
     transition_scroll+=2;
 
+
+
     if (transition_scroll>40)
     {
         transition_state=2;
@@ -76,8 +79,6 @@ void transition_animate_exit()
     u8 i;
 
     u8 y = 0;
-    u8 tile1=0;
-    u8 tile2=0;
     for(i = 0; i < 40; i++)
     {
         if (i < 10)
@@ -103,9 +104,12 @@ void transition_animate_exit()
     i++;
     transition_scroll+=2;
 
+   
+
     if (transition_scroll>28)
     {
         transition_state=0;
         transition_scroll=0;
+        
     }
 }
