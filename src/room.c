@@ -15,6 +15,8 @@ void room_init()
     x=0;
     y=0;
     game_pixels_scrolled=0;
+    game_draw_hud_text();
+    VDP_setHilightShadow(false);
 
     for (i=0; i<169; i++)
     {
@@ -49,7 +51,7 @@ void room_init()
 void place_floor(u8 x, u8 y)
 {
     u8 tile = 0;
-    if (x==ROOM_SIZE)
+    if ((x==ROOM_SIZE) | (tile_check_wall(x + 1, y)))
     tile=1;
     place_tile(x,y,tile);
 }

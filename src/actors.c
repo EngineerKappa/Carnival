@@ -202,10 +202,11 @@ void spawn_gate(int spawn_x,int spawn_y)
     Actor *a = &actors[actor_find_empty_slot()];
     actor_set_defaults(a);
     
+    gate = a;
     a->type = OBJ_GATE;
     a->x = spawn_x;
     a->y = spawn_y;
-
+    
     a->sprite = SPR_addSprite(&spr_gate,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16,TILE_ATTR(PAL1,0,FALSE,a->hflip));
     SPR_setAutoTileUpload(a->sprite, FALSE);
     SPR_setFrameChangeCallback(a->sprite, &gate_animate);

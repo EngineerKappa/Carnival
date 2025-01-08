@@ -3,7 +3,8 @@
 #include <background.h>
 #include <actors.h>
 #include <player.h>
-#include <transition.h>
+#include <gm_game.h>
+#include <system.h>
 
 
 void player_init(){
@@ -44,7 +45,8 @@ void player_collect_item()
                 actor_free(a);
                 break;
             case OBJ_GATE:
-                transition_start();
+                gm_timer=0;
+                gm_state=GAME_STATE_GATE;
                 break;
             }
             

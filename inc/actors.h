@@ -36,6 +36,7 @@ typedef struct Actor {
 } Actor;
 
 Actor *player;
+Actor *gate;
 u8 actors_spawned;
 #define MAX_ACTORS 80
 Actor actors[MAX_ACTORS];

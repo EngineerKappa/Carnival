@@ -8,6 +8,9 @@
 
 void game_check_turn()
 {
+	if (gm_state!=GAME_STATE_NORMAL)
+	return;
+
 	if (input_player_check())
 	{
 		gm_state=GAME_STATE_MOVE;
