@@ -8,6 +8,7 @@
 u16 VRAM_ind;
 u16 BG_VRAM_ind;
 u16 FG_VRAM_ind;
+u16 SPR_VRAM_ind;
 s16 background_x;
 s16 background_y;
 

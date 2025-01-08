@@ -3,10 +3,16 @@
 #include <actors.h>
 #include <background.h>
 #include <player.h>
+#include <gm_game.h>
+#include <room.h>
 
 void actor_sprite_init()
 {
-    sprite_index_yorb=SPR_loadAllFrames(&spr_yorb,TILE_SPRITE_INDEX+32,NULL);
+    u16 numTile;
+    SPR_VRAM_ind=TILE_FONT_INDEX-16;
+    sprite_index_yorb=SPR_loadAllFrames(&spr_yorb,SPR_VRAM_ind,&numTile);
+    SPR_VRAM_ind-=numTile;
+    sprite_index_gate=SPR_loadAllFrames(&spr_gate,SPR_VRAM_ind,&numTile);
 }
 
 void actors_init(){
@@ -31,7 +37,7 @@ void actor_set_defaults(Actor *a)
     a->hflip = false;
     a->vflip = false;
     a->sprite = NULL;
-    a->act_step_start = NULL;
+    a->act_move_start = NULL;
 }
 
 u8 actor_find_empty_slot()
@@ -55,14 +61,25 @@ void actor_free(Actor* a)
     actors_spawned--;
 }
 
+void actors_clear_all()
+{
+    u8 i;
+    for(i = 0; i < MAX_ACTORS; i++)
+    {
+        Actor* a = &actors[i];
+        if ((a->type != OBJ_EMPTY))
+        actor_free(a);
+    }
+}
+
 void actors_update()
 {
     u8 i;
     for(i = 0; i < MAX_ACTORS; i++)
     {
         Actor* a = &actors[i];
-        if ((a->type != OBJ_EMPTY) && (a->act_step_start!=NULL))
-        a->act_step_start(a);
+        if ((a->type != OBJ_EMPTY) && (a->act_move_start!=NULL))
+        a->act_move_start(a);
     }
 }
 
@@ -94,20 +111,70 @@ void actor_turn(Actor* a)
 			SPR_setHFlip(a->sprite,true);
 			break;
 	}
+
+    if (tile_check_wall(a->target_x,a->target_y))
+    {
+        a->target_x=a->x;
+	    a->target_y=a->y;
+    }
+
+}
+
+void actor_set_position(Actor* a, u8 target_x,u8 target_y)
+{
+    a->x=target_x;
+    a->y=target_y;
+    SPR_setPosition(a->sprite,WINDOW_X+a->x * 16,WINDOW_Y+a->y * 16 - 4);
+}
+
+void game_move_actors()
+{
+    u8 i;
+    for(i = 0; i < MAX_ACTORS; i++)
+    {
+        Actor* a = &actors[i];
+        if ((a->type != OBJ_EMPTY)  && (a->act_move_start!=NULL))
+        actor_move(a);
+    }
 }
 
 void actor_move(Actor* a)
 {
+    if (a->x > a->target_x)
+        a->scroll_x=-game_pixels_scrolled;
+    if (a->x < a->target_x)
+        a->scroll_x=game_pixels_scrolled;
+    if (a->y < a->target_y)
+        a->scroll_y=game_pixels_scrolled;
+    if (a->y > a->target_y)
+        a->scroll_y=-game_pixels_scrolled;
+    SPR_setPosition(a->sprite,WINDOW_X+a->x * 16 + a->scroll_x, WINDOW_Y+a->y * 16 - 4 + a->scroll_y);
+}
+
+void game_move_end()
+{
+    u8 i;
+    for(i = 0; i < MAX_ACTORS; i++)
+    {
+        Actor* a = &actors[i];
+        if ((a->type != OBJ_EMPTY)  && (a->act_move_start!=NULL))
+        actor_move_finish(a);
+    }
+}
+
+void actor_move_finish(Actor * a)
+{
     a->x=a->target_x;
     a->y=a->target_y;
-    a->x=clamp(a->x,0,ROOM_SIZE);
-	a->y=clamp(a->y,0,ROOM_SIZE);
-    SPR_setPosition(a->sprite,WINDOW_X+a->x * 16,WINDOW_Y+a->y * 16);
+    a->scroll_x=0;
+    a->scroll_y=0;
+    SPR_setPosition(a->sprite,WINDOW_X+a->x * 16 + a->scroll_x, WINDOW_Y+a->y * 16 - 4 + a->scroll_y);
+    if ((a->type != OBJ_EMPTY)  && (a->act_move_finish!=NULL))
+        a->act_move_finish(a);
 }
 
 void spawn_yorb(int spawn_x,int spawn_y)
 {
-
     Actor *a = &actors[actor_find_empty_slot()];
     actor_set_defaults(a);
     
@@ -115,7 +182,7 @@ void spawn_yorb(int spawn_x,int spawn_y)
     a->x = spawn_x;
     a->y = spawn_y;
 
-    a->sprite = SPR_addSprite(&spr_yorb,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16,TILE_ATTR(PAL0,0,FALSE,a->hflip));
+    a->sprite = SPR_addSprite(&spr_yorb,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
     SPR_setAutoTileUpload(a->sprite, FALSE);
     s16 frame = (((a->x + a->y)) % 4);
     SPR_setFrame(a->sprite,frame);
@@ -130,7 +197,27 @@ void yorb_animate(Sprite* sprite)
     SPR_setVRAMTileIndex(sprite,tileIndex);
 }
 
+void spawn_gate(int spawn_x,int spawn_y)
+{
+    Actor *a = &actors[actor_find_empty_slot()];
+    actor_set_defaults(a);
+    
+    a->type = OBJ_GATE;
+    a->x = spawn_x;
+    a->y = spawn_y;
 
+    a->sprite = SPR_addSprite(&spr_gate,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16,TILE_ATTR(PAL1,0,FALSE,a->hflip));
+    SPR_setAutoTileUpload(a->sprite, FALSE);
+    SPR_setFrameChangeCallback(a->sprite, &gate_animate);
+    yorb_animate(a->sprite);
+    actors_spawned++;
+}
+
+void gate_animate(Sprite* sprite)
+{
+    u16 tileIndex = sprite_index_gate[sprite->animInd][sprite->frameInd];
+    SPR_setVRAMTileIndex(sprite,tileIndex);
+}
 
 
 

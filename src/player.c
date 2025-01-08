@@ -3,6 +3,7 @@
 #include <background.h>
 #include <actors.h>
 #include <player.h>
+#include <transition.h>
 
 
 void player_init(){
@@ -16,15 +17,16 @@ void player_init(){
     pl->hflip = false;
     pl->vflip = false;
     pl->sprite = SPR_addSprite(&spr_swordsman,WINDOW_X+pl->x * 16 ,WINDOW_Y+pl->y * 16,TILE_ATTR(PAL1,0,FALSE,pl->hflip));
-    pl->act_step_start = player_step;
+    pl->act_move_start = player_step;
+    pl->act_move_finish = player_collect_item;
     actors_spawned=1;
     player = pl;
 }
 
 void player_step()
 {
-    actor_move(player);
-    player_collect_item();
+    
+    //player_collect_item();
 }
 
 void player_collect_item()
@@ -34,9 +36,18 @@ void player_collect_item()
     {
         
         Actor* a = &actors[i];
-        if ((a->type == OBJ_YORB) && a->x == player->x && a->y == player->y)
+        if ( a->x == player->x && a->y == player->y)
         {
-            actor_free(a);
+            switch (a->type)
+            {
+            case OBJ_YORB:
+                actor_free(a);
+                break;
+            case OBJ_GATE:
+                transition_start();
+                break;
+            }
+            
         }
     }
 }

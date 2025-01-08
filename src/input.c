@@ -3,14 +3,14 @@
 #include <gfx.h>
 #include <actors.h>
 #include <player.h>
+#include <system.h>
+#include <gm_game.h>
 
-void run_turn()
+void game_check_turn()
 {
-	if (input_player_check() && ((turn_updated==false) | (delayed_auto_shift >= AUTO_SHIFT_LIMIT) ))
+	if (input_player_check())
 	{
-		if (delayed_auto_shift >= AUTO_SHIFT_LIMIT)
-			delayed_auto_shift = AUTO_SHIFT_RESTART;
-
+		gm_state=GAME_STATE_MOVE;
 		actors_update();
 		turn_updated=true;
 
@@ -27,13 +27,11 @@ void run_turn()
 	if (joypad_data==0)
 	{
 		turn_updated=false;
-		delayed_auto_shift=0;
 	}
 }
 
 void input_init()
 {
-	delayed_auto_shift=0;
 	joypad_data=0;
 }
 
@@ -58,7 +56,6 @@ bool input_player_check()
 	{
 		return false;
 	}	
-	delayed_auto_shift++;
 	player->facing_dir=dir;
 	actor_turn(player);
 	return true;

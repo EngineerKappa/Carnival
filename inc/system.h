@@ -6,6 +6,8 @@ enum {
     GM_ENDING
 };
 
+
+
 void system_init();
 void system_update();
 void gm_change(u8 gm);

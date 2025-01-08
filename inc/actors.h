@@ -3,7 +3,7 @@ enum {
     OBJ_EMPTY = 0,
     OBJ_PLAYER,
     OBJ_YORB,
-    OBJ_EXIT,
+    OBJ_GATE,
     OBJ_BONEYM
 };
 enum 
@@ -31,8 +31,8 @@ typedef struct Actor {
     Sprite* sprite;
     bool hflip, vflip;
     u8 frame;
-    FunctionPointer act_step_start;
-    FunctionPointer act_step_finish;
+    FunctionPointer act_move_start;
+    FunctionPointer act_move_finish;
 } Actor;
 
 Actor *player;
@@ -42,16 +42,28 @@ Actor actors[MAX_ACTORS];
 
 // animation index table for enemies (static VRAM loading)
 u16** sprite_index_yorb;
-void yorb_animate(Sprite* sprite);
+u16** sprite_index_gate;
+
 
 u8 actor_find_empty_slot();
 void actor_free(Actor* a);
 
+void actors_clear_all();
+
 void spawn_yorb(int spawn_x,int spawn_y);
+void spawn_gate(int spawn_x,int spawn_y);
+
+void yorb_animate(Sprite* sprite);
+void gate_animate(Sprite* sprite);
+
 void actors_update();
 void actors_init();
 
+void actor_set_position(Actor* a, u8 target_x,u8 target_y);
+void game_move_actors();
 void actor_move(Actor* a);
+void game_move_end();
+void actor_move_finish(Actor * a);
 void actor_turn(Actor* a);
 void actors_update();
 

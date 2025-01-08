@@ -8,9 +8,6 @@ u16 joypad_data_previous;
 bool mouse_enabled;
 u16 cursor_x;
 u16 cursor_y;
-u8 delayed_auto_shift;
-#define AUTO_SHIFT_RESTART 5
-#define AUTO_SHIFT_LIMIT 10
 
 Sprite* s_mouse_cursor;
 
@@ -21,7 +18,7 @@ bool inputBack();
 bool inputBackPressed();
 void input_init();
 bool input_player_check();
-void run_turn();
+void game_check_turn();
 
 
 
