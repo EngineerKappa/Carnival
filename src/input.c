@@ -14,7 +14,8 @@ void game_check_turn()
 	
 	if (input_player_check())
 	{
-		
+		step_count++;
+		game_draw_hud_text();
 		gm_state=GAME_STATE_MOVE;
 		actors_update();
 		turn_updated=true;

@@ -20,7 +20,6 @@ void room_init()
     
     
     game_pixels_scrolled=0;
-    
 
     u8 x,y,i;
     x=0;
@@ -62,7 +61,7 @@ void room_end()
     SPR_defragVRAM();
     VDP_setHilightShadow(false);
     actors_clear_all(false);
-    player_reset();
+    level_current ++;
 }
 
 void place_floor(u8 x, u8 y)

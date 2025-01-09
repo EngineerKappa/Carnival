@@ -19,7 +19,9 @@ void game_init()
     PAL_setPalette(PAL1, spr_swordsman.palette->data, DMA);
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     
-    
+    level_current=0;
+    yorb_count=0;
+    step_count=0;
     func_update=game_update;
     room_init();
     //XGM_startPlay(bgm_fjf);
@@ -46,12 +48,30 @@ void game_run_move()
 
 void game_draw_hud_text()
 {
-
+    char str[10];
     VDP_drawTextBG(BG_B,"Castle",28,2);
     VDP_drawTextBG(BG_B,"  Kranion",28,3);
-    VDP_drawTextBG(BG_B,"Floor 01",28,5);
+
+    sprintf(str, "Floor %d", level_current+1);
+    VDP_drawTextBG(BG_B,str,28,5);
 
     VDP_drawTextBG(BG_B,"Swordsman",28,7);
+    VDP_drawTextBG(BG_B,"*****",30,9);
+
+    VDP_drawTextBG(BG_B,"Yorbs",28,11);
+    sprintf(str, "%02d / 50", yorb_count);
+    VDP_drawTextBG(BG_B,str,30,13);
+
+    VDP_drawTextBG(BG_B,"Treasure",28,15);
+    VDP_drawTextBG(BG_B,"000",31,17);
+
+    sprintf(str, "%04d", step_count);
+    VDP_drawTextBG(BG_B,"Steps",28,19);
+    VDP_drawTextBG(BG_B,str,31,21);
+
+    VDP_drawTextBG(BG_B,"Score",28,23);
+    VDP_drawTextBG(BG_B,"00000",31,25);
+
 }
 
 void game_run_gate()

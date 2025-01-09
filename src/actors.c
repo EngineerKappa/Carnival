@@ -216,6 +216,8 @@ void yorb_animate(Sprite* sprite)
 void yorb_collect(Actor * a)
 {
     a->type=OBJ_EFFECT;
+    yorb_count++;
+    game_draw_hud_text();
     SPR_setAnim(a->sprite,1);
     a->act_realtime=effect_run;
 }

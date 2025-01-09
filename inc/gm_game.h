@@ -9,6 +9,9 @@ void game_init();
 void game_end();
 void game_update();
 void game_draw_hud_text();
+u8 level_current;
+u16 yorb_count;
+u16 step_count;
 
 
 void game_run_move();
