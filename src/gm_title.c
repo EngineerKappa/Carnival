@@ -34,10 +34,9 @@ void title_update()
     
     if (joypad_data & BUTTON_START)
     {
-        transition_start();
+        transition_start(transition_title_start_game);
         XGM_stopPlay();
     }
-    //gm_change(GM_GAME);
 }
 
 void title_end()

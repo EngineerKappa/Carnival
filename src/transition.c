@@ -10,9 +10,10 @@ void transition_init()
     transition_scroll=0;
 }
 
-void transition_start()
+void transition_start(void *callback)
 {
-    func_update=NULL;
+    transition_callback=callback;
+    
     transition_scroll=0;
     transition_state=1;
 }
@@ -70,7 +71,8 @@ void transition_animate_enter()
     {
         transition_state=2;
         transition_scroll=0;
-        gm_change(GM_GAME);
+        transition_callback();
+
     }
 }
 
@@ -112,4 +114,15 @@ void transition_animate_exit()
         transition_scroll=0;
         
     }
+}
+
+void transition_title_start_game()
+{
+    gm_change(GM_GAME);
+}
+
+void transition_room_next()
+{
+    room_end();
+    room_init();
 }

@@ -12,16 +12,14 @@
 
 void game_init()
 {
-    SPR_init();
-    actors_clear_all();
     BG_load_frame();
-    BG_display_frame();
+    actors_clear_all(true);
+    actors_init();
     VDP_loadTileSet(&castle_tileset,BG_VRAM_ind,DMA);
     PAL_setPalette(PAL1, spr_swordsman.palette->data, DMA);
     PAL_setPalette(PAL2, castle_palette.data, DMA);
-    actors_init();
-    gm_state=GAME_STATE_NORMAL;
-    gm_timer=0;
+    
+    
     func_update=game_update;
     room_init();
     //XGM_startPlay(bgm_fjf);
@@ -80,7 +78,7 @@ void game_run_gate()
     SPR_setPosition(player->sprite,WINDOW_X+player->x * 16 + player->scroll_x, WINDOW_Y+player->y * 16 - 4 + player->scroll_y);
     if (gm_timer==60)
     {
-        transition_start();
+       transition_start(transition_room_next);
     }
 }
 
@@ -89,6 +87,7 @@ void game_update()
     switch (gm_state)
     {
         case GAME_STATE_NORMAL:
+        
         game_check_turn();
         break;
 
@@ -100,5 +99,5 @@ void game_update()
         game_run_gate();
         break;
     }
-    
+    game_run_actors_realtime();
 }

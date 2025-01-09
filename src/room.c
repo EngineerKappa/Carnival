@@ -11,18 +11,27 @@ const u8 tiledefs[16] = { 0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 
 void room_init()
 {
+    
+    gm_state=GAME_STATE_NORMAL;
+    gm_timer=0;
+    
+    BG_display_frame();
+    game_draw_hud_text();
+    
+    
+    game_pixels_scrolled=0;
+    
+
     u8 x,y,i;
     x=0;
     y=0;
-    game_pixels_scrolled=0;
-    game_draw_hud_text();
-    VDP_setHilightShadow(false);
 
     for (i=0; i<169; i++)
     {
         switch (room_data[i]) 
         {
             case RS_PLAYER:
+                player_reset();
                 actor_set_position(player, x,y);
                 place_floor(x,y);
                 break;
@@ -46,6 +55,14 @@ void room_init()
             y++;
         }
     }
+}
+
+void room_end()
+{
+    SPR_defragVRAM();
+    VDP_setHilightShadow(false);
+    actors_clear_all(false);
+    player_reset();
 }
 
 void place_floor(u8 x, u8 y)

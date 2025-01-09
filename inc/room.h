@@ -5,7 +5,7 @@ extern room room_data;
 
 
 void room_init();
-
+void room_end();
 void place_tile(u8 x, u8 y,u8 start_tile);
 void place_floor(u8 x, u8 y);
 

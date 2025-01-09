@@ -13,18 +13,17 @@ void BG_init()
 	background_x = 0;
 	background_y = 0;
 	VRAM_ind = TILE_USER_INDEX;
-	BG_VRAM_ind = 1;
-	FG_VRAM_ind = 1;
+	BG_VRAM_ind = TILE_USER_INDEX;
 	SPR_VRAM_ind = TILE_SPRITE_INDEX;
 }
 
 void BG_load_frame()
 {
-	//Load Frame
-	FG_VRAM_ind = VRAM_ind;
-	VDP_loadTileSet(&ui_tileset, FG_VRAM_ind, DMA);
+	//Load this before we load any other graphics
+	VRAM_ind=TILE_USER_INDEX;
+	VDP_loadTileSet(&ui_tileset, VRAM_ind, DMA);
+	bgb = MAP_create(&ui_map, BG_B, TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, VRAM_ind));
 	VRAM_ind += ui_tileset.numTile;
-	bgb = MAP_create(&ui_map, BG_B, TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, FG_VRAM_ind));
 	BG_VRAM_ind = VRAM_ind;
 	//Load Tilemaps
 	

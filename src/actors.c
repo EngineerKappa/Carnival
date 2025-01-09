@@ -9,7 +9,8 @@
 void actor_sprite_init()
 {
     u16 numTile;
-    SPR_VRAM_ind=TILE_FONT_INDEX-16;
+    SPR_VRAM_ind=TILE_FONT_INDEX-20
+    ;
     sprite_index_yorb=SPR_loadAllFrames(&spr_yorb,SPR_VRAM_ind,&numTile);
     SPR_VRAM_ind-=numTile;
     sprite_index_gate=SPR_loadAllFrames(&spr_gate,SPR_VRAM_ind,&numTile);
@@ -38,6 +39,8 @@ void actor_set_defaults(Actor *a)
     a->vflip = false;
     a->sprite = NULL;
     a->act_move_start = NULL;
+    a->act_move_finish = NULL;
+    a->act_realtime = NULL;
 }
 
 u8 actor_find_empty_slot()
@@ -61,10 +64,12 @@ void actor_free(Actor* a)
     actors_spawned--;
 }
 
-void actors_clear_all()
+void actors_clear_all(bool delete_player)
 {
-    u8 i;
-    for(i = 0; i < MAX_ACTORS; i++)
+    u8 i=1;
+    if (delete_player)
+    i=0;    
+    for(; i < MAX_ACTORS; i++)
     {
         Actor* a = &actors[i];
         if ((a->type != OBJ_EMPTY))
@@ -162,6 +167,17 @@ void game_move_end()
     }
 }
 
+void game_run_actors_realtime()
+{
+    u8 i;
+    for(i = 0; i < MAX_ACTORS; i++)
+    {
+        Actor* a = &actors[i];
+        if ((a->type != OBJ_EMPTY)  && (a->act_realtime!=NULL))
+        a->act_realtime(a);
+    }
+}
+
 void actor_move_finish(Actor * a)
 {
     a->x=a->target_x;
@@ -195,6 +211,34 @@ void yorb_animate(Sprite* sprite)
 {
     u16 tileIndex = sprite_index_yorb[sprite->animInd][sprite->frameInd];
     SPR_setVRAMTileIndex(sprite,tileIndex);
+}
+
+void yorb_collect(Actor * a)
+{
+    a->type=OBJ_EFFECT;
+    SPR_setAnim(a->sprite,1);
+    a->act_realtime=effect_run;
+}
+
+void effect_run(Actor * a)
+{
+    a->timer++;
+    a->frame++;
+    if (a->frame == 5)
+    {
+        a->hflip=!a->hflip;
+        SPR_setHFlip(a->sprite,a->hflip);
+    }
+    if (a->frame == 10)
+    {
+        a->vflip=!a->vflip;
+        SPR_setVFlip(a->sprite,a->vflip);
+        a->frame = 0;
+    }
+    if (a->timer == 20)
+    {
+        actor_free(a);
+    }
 }
 
 void spawn_gate(int spawn_x,int spawn_y)
