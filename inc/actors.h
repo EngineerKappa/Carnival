@@ -47,6 +47,8 @@ Actor actors[MAX_ACTORS];
 // animation index table for enemies (static VRAM loading)
 u16** sprite_index_yorb;
 u16** sprite_index_gate;
+u16** sprite_index_boneym;
+u16** sprite_index_pointy;
 
 
 u8 actor_find_empty_slot();
@@ -56,9 +58,14 @@ void actors_clear_all(bool delete_player);
 
 void spawn_yorb(int spawn_x,int spawn_y);
 void spawn_gate(int spawn_x,int spawn_y);
+void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir);
+void spawn_pointy(int spawn_x,int spawn_y,u8 facing_dir);
 
 void yorb_animate(Sprite* sprite);
 void gate_animate(Sprite* sprite);
+void boneym_animate(Sprite* sprite);
+void pointy_animate(Sprite* sprite);
+
 void yorb_collect(Actor * a);
 
 void effect_run(Actor * a);

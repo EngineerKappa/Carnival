@@ -9,11 +9,14 @@
 void actor_sprite_init()
 {
     u16 numTile;
-    SPR_VRAM_ind=TILE_FONT_INDEX-20
-    ;
+    SPR_VRAM_ind=SPR_getFreeVRAM();
     sprite_index_yorb=SPR_loadAllFrames(&spr_yorb,SPR_VRAM_ind,&numTile);
-    SPR_VRAM_ind-=numTile;
+    SPR_VRAM_ind+=numTile;
     sprite_index_gate=SPR_loadAllFrames(&spr_gate,SPR_VRAM_ind,&numTile);
+    SPR_VRAM_ind+=numTile;
+    sprite_index_boneym=SPR_loadAllFrames(&spr_boneym,SPR_VRAM_ind,&numTile);
+    SPR_VRAM_ind+=numTile;
+    sprite_index_pointy=SPR_loadAllFrames(&spr_pointy,SPR_VRAM_ind,&numTile);
 }
 
 void actors_init(){
@@ -187,6 +190,29 @@ void actor_move_finish(Actor * a)
     SPR_setPosition(a->sprite,WINDOW_X+a->x * 16 + a->scroll_x, WINDOW_Y+a->y * 16 - 4 + a->scroll_y);
     if ((a->type != OBJ_EMPTY)  && (a->act_move_finish!=NULL))
         a->act_move_finish(a);
+}
+
+void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir)
+{
+    Actor *a = &actors[actor_find_empty_slot()];
+    actor_set_defaults(a);
+
+    a->type = OBJ_YORB;
+    a->x = spawn_x;
+    a->y = spawn_y;
+
+    a->sprite = SPR_addSprite(&spr_boneym,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
+    SPR_setAutoTileUpload(a->sprite, FALSE);
+    SPR_setFrame(a->sprite,0);
+    SPR_setFrameChangeCallback(a->sprite, &boneym_animate);
+    boneym_animate(a->sprite);
+    actors_spawned++;
+}
+
+void boneym_animate(Sprite* sprite)
+{
+    u16 tileIndex = sprite_index_boneym[sprite->animInd][sprite->frameInd];
+    SPR_setVRAMTileIndex(sprite,tileIndex);
 }
 
 void spawn_yorb(int spawn_x,int spawn_y)

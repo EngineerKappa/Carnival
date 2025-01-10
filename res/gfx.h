@@ -17,5 +17,7 @@ extern const Palette canyon_palette;
 extern const SpriteDefinition spr_swordsman;
 extern const SpriteDefinition spr_yorb;
 extern const SpriteDefinition spr_gate;
+extern const SpriteDefinition spr_boneym;
+extern const SpriteDefinition spr_pointy;
 
 #endif // _RES_GFX_H_

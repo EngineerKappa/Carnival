@@ -45,6 +45,22 @@ void room_init()
                 place_floor(x,y);
                 spawn_gate(x,y);
                 break;
+            case RS_BONEYM_DOWN:
+                place_floor(x,y);
+                spawn_boneym(x,y,DIR_DOWN);
+                break;
+            case RS_BONEYM_RIGHT:
+                place_floor(x,y);
+                spawn_boneym(x,y,DIR_RIGHT);
+                break;
+            case RS_BONEYM_LEFT:
+                place_floor(x,y);
+                spawn_boneym(x,y,DIR_LEFT);
+                break;
+            case RS_BONEYM_UP:
+                place_floor(x,y);
+                spawn_boneym(x,y,DIR_LEFT);
+                break;
             default:
                 place_tile(x,y,room_data[i]);
         }
