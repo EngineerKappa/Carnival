@@ -1,10 +1,34 @@
 
-typedef u8 room[169];
-extern room room_data;
+#define ROOM_MAX_TILES 169
+typedef u8 room[ROOM_MAX_TILES];
+room room_data;
+room* room_list[50];
+u8 MAX_ROOMS;
+
+extern room floor_1;
+extern room floor_2;
+extern room floor_3;
+extern room floor_4;
+extern room floor_5;
+extern room floor_6;
+extern room floor_7;
+extern room floor_8;
+extern room floor_9;
+extern room floor_10;
+extern room floor_11;
+extern room floor_12;
+extern room floor_14;
+extern room floor_15;
+extern room floor_16;
+extern room floor_17;
+extern room floor_18;
+extern room floor_19;
+extern room floor_20;
 
 
-
+void room_list_init();
 void room_init();
+void room_load();
 void room_end();
 void place_tile(u8 x, u8 y,u8 start_tile);
 void place_floor(u8 x, u8 y);

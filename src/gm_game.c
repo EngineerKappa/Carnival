@@ -12,6 +12,7 @@
 
 void game_init()
 {
+    room_list_init();
     BG_load_frame();
     actors_clear_all(true);
     actors_init();
@@ -19,11 +20,13 @@ void game_init()
     PAL_setPalette(PAL1, spr_swordsman.palette->data, DMA);
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     
-    level_current=0;
+    floor_current=1;
     yorb_count=0;
     step_count=0;
     func_update=game_update;
+    room_load();
     room_init();
+    
     //XGM_startPlay(bgm_fjf);
 }
 
@@ -52,7 +55,7 @@ void game_draw_hud_text()
     VDP_drawTextBG(BG_B,"Castle",28,2);
     VDP_drawTextBG(BG_B,"  Kranion",28,3);
 
-    sprintf(str, "Floor %d", level_current+1);
+    sprintf(str, "Floor %d", floor_current);
     VDP_drawTextBG(BG_B,str,28,5);
 
     VDP_drawTextBG(BG_B,"Swordsman",28,7);

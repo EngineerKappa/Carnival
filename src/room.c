@@ -7,7 +7,10 @@
 #include <gm_game.h>
 #include <room.h>
 
+
 const u8 tiledefs[16] = { 0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+
+
 
 void room_init()
 {
@@ -20,12 +23,12 @@ void room_init()
     
     
     game_pixels_scrolled=0;
-
+    
     u8 x,y,i;
     x=0;
     y=0;
 
-    for (i=0; i<169; i++)
+    for (i=0; i<ROOM_MAX_TILES; i++)
     {
         switch (room_data[i]) 
         {
@@ -56,12 +59,22 @@ void room_init()
     }
 }
 
+void room_load()
+{
+    int n = sizeof(room_data) / sizeof(room_data[0]);
+    memcpy(room_data,room_list[floor_current],n);
+}
+
 void room_end()
 {
     SPR_defragVRAM();
     VDP_setHilightShadow(false);
     actors_clear_all(false);
-    level_current ++;
+    floor_current ++;
+    if (floor_current>MAX_ROOMS)
+    floor_current=1;
+
+    room_load();
 }
 
 void place_floor(u8 x, u8 y)

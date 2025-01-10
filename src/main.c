@@ -7,11 +7,13 @@
 #include <input.h>
 #include <actors.h>
 #include <transition.h>
+#include <room.h>
 
 
 int main()
 {
 	system_init();
+	
 	while(1)
 	{     
 		
