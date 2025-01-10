@@ -79,6 +79,7 @@ void game_draw_hud_text()
 
 void game_run_gate()
 {
+    int play_y;
     if (gm_timer==0)
     {
         gate_speed=0;
@@ -98,7 +99,11 @@ void game_run_gate()
         player->facing_dir=0;
         actor_turn(player);
     }
-    SPR_setPosition(player->sprite,WINDOW_X+player->x * 16 + player->scroll_x, WINDOW_Y+player->y * 16 - 4 + player->scroll_y);
+    play_y=WINDOW_Y+player->y * 16 - 4 + player->scroll_y;
+    if (play_y<-16)
+    play_y=-16;
+
+    SPR_setPosition(player->sprite,WINDOW_X+player->x * 16 + player->scroll_x, play_y);
     if (gm_timer==60)
     {
        transition_start(transition_room_next);
