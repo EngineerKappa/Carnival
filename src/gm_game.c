@@ -1,13 +1,4 @@
-#include <genesis.h>
-#include <sound.h>
-#include <gfx.h>
-#include <system.h>
-#include <gm_game.h>
-#include <input.h>
-#include <actors.h>
-#include <background.h>
-#include <room.h>
-#include <transition.h>
+#include <headers.h>
 
 
 void game_init()
@@ -27,7 +18,7 @@ void game_init()
     room_load();
     room_init();
     
-    //XGM_startPlay(bgm_fjf);
+    XGM2_play(bgm_fjf);
 }
 
 void game_end()

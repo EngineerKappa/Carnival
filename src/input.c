@@ -1,10 +1,4 @@
-#include <genesis.h>
-#include <input.h>
-#include <gfx.h>
-#include <actors.h>
-#include <player.h>
-#include <system.h>
-#include <gm_game.h>
+#include <headers.h>
 
 void game_check_turn()
 {

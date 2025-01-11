@@ -1,10 +1,4 @@
-#include <genesis.h>
-#include <gfx.h>
-#include <background.h>
-#include <actors.h>
-#include <player.h>
-#include <gm_game.h>
-#include <system.h>
+#include <headers.h>
 
 
 void player_init(){
@@ -60,6 +54,7 @@ void player_collect_item()
                 yorb_collect(a);
                 break;
             case OBJ_GATE:
+                XGM2_playPCM(snd_teleport,sizeof(snd_teleport),SOUND_PCM_CH2);
                 gm_timer=0;
                 gm_state=GAME_STATE_GATE;
                 break;

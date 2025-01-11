@@ -1,12 +1,4 @@
-#include <genesis.h>
-#include <sound.h>
-#include <gfx.h>
-#include <system.h>
-#include <transition.h>
-#include <input.h>
-#include <background.h>
-#include <gm_game.h>
-#include <gm_title.h>
+#include <headers.h>
 
 void system_init()
 {
@@ -14,11 +6,13 @@ void system_init()
 	input_init();
 	SPR_init();
 	BG_init();
+	Z80_loadDriver(Z80_DRIVER_XGM2,true);
+	XGM2_setLoopNumber(0);
 	transition_init();
 	JOY_setEventHandler(&input_update);
     PAL_setPalette(PAL0, frame.palette->data, DMA);
 	VDP_loadFont(custom_font.tileset, DMA);
-    gm_current=GM_GAME;
+    gm_current=GM_TITLE;
 	
 	gm_start(gm_current);
 }

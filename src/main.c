@@ -1,14 +1,4 @@
-#include <genesis.h>
-#include <sound.h>
-#include <gfx.h>
-#include <system.h>
-#include <gm_game.h>
-#include <background.h>
-#include <input.h>
-#include <actors.h>
-#include <transition.h>
-#include <room.h>
-
+#include <headers.h>
 
 int main()
 {

@@ -1,12 +1,4 @@
-#include <genesis.h>
-#include <gfx.h>
-#include <system.h>
-#include <actors.h>
-#include <player.h>
-#include <background.h>
-#include <gm_game.h>
-#include <room.h>
-
+#include <headers.h>
 
 const u8 tiledefs[16] = { 0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 

@@ -1,8 +1,4 @@
-#include <genesis.h>
-#include <system.h>
-#include <transition.h>
-#include <background.h>
-#include <room.h>
+#include <headers.h>
 
 void transition_init()
 {

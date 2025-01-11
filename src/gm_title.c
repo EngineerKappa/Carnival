@@ -1,11 +1,4 @@
-#include <genesis.h>
-#include <sound.h>
-#include <gfx.h>
-#include <input.h>
-#include <system.h>
-#include <background.h>
-#include <transition.h>
-#include <gm_title.h>
+#include <headers.h>
 
 void title_init()
 {
@@ -14,8 +7,7 @@ void title_init()
     VDP_drawTextBG(BG_B,"Game by EngineerKappa",2,24);
     VDP_drawTextBG(BG_B,"Characters by SuperFreaksDev",2,25);
     VDP_drawTextBG(BG_B,"Made for FreakJam 2025",2,26);
-
-    //XGM_startPlay(bgm_title);
+    XGM2_play(bgm_title);
     func_update=title_update;
 }
 
@@ -35,7 +27,9 @@ void title_update()
     if (joypad_data & BUTTON_START)
     {
         transition_start(transition_title_start_game);
-        XGM_stopPlay();
+        XGM2_stop();
+        
+        XGM2_playPCM(snd_ding,sizeof(snd_ding),SOUND_PCM_CH2);
     }
 }
 

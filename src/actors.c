@@ -1,10 +1,4 @@
-#include <genesis.h>
-#include <gfx.h>
-#include <actors.h>
-#include <background.h>
-#include <player.h>
-#include <gm_game.h>
-#include <room.h>
+#include <headers.h>
 
 void actor_sprite_init()
 {
@@ -246,6 +240,8 @@ void yorb_collect(Actor * a)
     game_draw_hud_text();
     SPR_setAnim(a->sprite,1);
     a->act_realtime=effect_run;
+    XGM2_playPCM(snd_yorb,sizeof(snd_yorb),SOUND_PCM_CH2);
+    
 }
 
 void effect_run(Actor * a)

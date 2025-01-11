@@ -1,5 +1,4 @@
-#include <genesis.h>
-#include <room.h>
+#include <headers.h>
 
 void room_list_init(){
 room_list[1] = &floor_1;

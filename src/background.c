@@ -1,6 +1,4 @@
-#include <genesis.h>
-#include <background.h>
-#include <gfx.h>
+#include <headers.h>
 
 u8 palcycle_index;
 u8 palcycle_wait;

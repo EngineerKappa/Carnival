@@ -1,3 +1,7 @@
-XGM bgm_title "bgm/title.vgm"
-XGM bgm_cutscene "bgm/cutscene.vgm"
-XGM bgm_fjf "bgm/fjf.vgm"
+XGM2 bgm_title "bgm/title.vgm"
+XGM2 bgm_cutscene "bgm/cutscene.vgm"
+XGM2 bgm_fjf "bgm/fjf.vgm"
+
+WAV snd_yorb "sfx/yorb_compressed.wav" XGM2 
+WAV snd_teleport "sfx/teleport_compressed.wav" XGM2 
+WAV snd_ding "sfx/ding_compressed.wav" XGM2 
