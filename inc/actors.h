@@ -23,19 +23,21 @@ typedef void (*FunctionPointer)(struct Actor*);
 #define DIR_DOWN 4
 
 typedef struct Actor {
-    u8 type;
-    int16_t x, y;
-    int16_t target_x, target_y;
-    int16_t scroll_x,scroll_y;
-    u8 facing_dir;
-    u8 state;
-    u16 timer;
-    Sprite* sprite;
-    bool hflip, vflip;
-    u8 frame;
     FunctionPointer act_realtime;
     FunctionPointer act_move_start;
     FunctionPointer act_move_finish;
+    Sprite* sprite;
+    int16_t x, y;
+    int16_t target_x, target_y;
+    int16_t scroll_x,scroll_y; 
+    u16 timer;
+    u8 facing_dir;
+    u8 state;
+    u8 frame;
+    u8 type;
+    bool hflip, vflip;
+    
+    
 } Actor;
 
 Actor *player;
