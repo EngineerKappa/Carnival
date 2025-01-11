@@ -3,13 +3,13 @@
 void game_check_turn()
 {
 	
+	//Exit if the turn ends and we're already in a new state
 	if (gm_state!=GAME_STATE_NORMAL)
 	return;
 	
 	if (input_player_check())
 	{
 		step_count++;
-		game_draw_hud_text();
 		gm_state=GAME_STATE_MOVE;
 		actors_update();
 		turn_updated=true;
@@ -22,6 +22,7 @@ void game_check_turn()
 		{
 			player->frame = 0;
 		}
+		SPR_setFrame(player->sprite,player->frame);
 	}
 
 	if (joypad_data==0)
@@ -57,6 +58,7 @@ bool input_player_check()
 		return false;
 	}	
 	player->facing_dir=dir;
+	actor_face_dir(player);
 	actor_turn(player);
 	return true;
 }

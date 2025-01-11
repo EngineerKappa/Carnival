@@ -24,9 +24,9 @@ typedef void (*FunctionPointer)(struct Actor*);
 
 typedef struct Actor {
     u8 type;
-    int x, y;
-    int target_x, target_y;
-    int scroll_x,scroll_y;
+    int16_t x, y;
+    int16_t target_x, target_y;
+    int16_t scroll_x,scroll_y;
     u8 facing_dir;
     u8 state;
     u16 timer;
@@ -64,6 +64,8 @@ void spawn_pointy(int spawn_x,int spawn_y,u8 facing_dir);
 void yorb_animate(Sprite* sprite);
 void gate_animate(Sprite* sprite);
 void boneym_animate(Sprite* sprite);
+void boneym_move(Actor * a);
+void boneym_attack(Actor * a);
 void pointy_animate(Sprite* sprite);
 
 void yorb_collect(Actor * a);
@@ -79,6 +81,7 @@ void game_run_actors_realtime();
 void actor_move(Actor* a);
 void game_move_end();
 void actor_move_finish(Actor * a);
+void actor_face_dir(Actor* a);
 void actor_turn(Actor* a);
 void actors_update();
 

@@ -29,6 +29,7 @@ void player_reset()
     player->scroll_x = 0;
     player->scroll_y = 0;
     SPR_setPriority(player->sprite,false);
+    actor_face_dir(player);
     actor_turn(player);
 
 }
@@ -42,11 +43,13 @@ void player_step()
 void player_collect_item()
 {
     u8 i;
+    u8 px=player->x;
+    u8 py=player->y;
     for(i = 0; i < MAX_ACTORS; i++)
     {
         
         Actor* a = &actors[i];
-        if ( a->x == player->x && a->y == player->y)
+        if ( a->x == px && a->y == py)
         {
             switch (a->type)
             {

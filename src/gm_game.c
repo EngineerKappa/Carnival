@@ -11,13 +11,14 @@ void game_init()
     PAL_setPalette(PAL1, spr_swordsman.palette->data, DMA);
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     
-    floor_current=1;
+    floor_current=3;
     yorb_count=0;
     step_count=0;
     func_update=game_update;
+    update_hud=true;
     room_load();
     room_init();
-    
+    SYS_setVBlankCallback(game_draw_hud_text);
     XGM2_play(bgm_fjf);
 }
 
@@ -40,32 +41,36 @@ void game_run_move()
 
 }
 
-void game_draw_hud_text()
+void game_draw_hud_labels()
 {
-    char str[10];
     VDP_drawTextBG(BG_B,"Castle",28,2);
     VDP_drawTextBG(BG_B,"  Kranion",28,3);
-
-    sprintf(str, "Floor %d", floor_current);
-    VDP_drawTextBG(BG_B,str,28,5);
-
     VDP_drawTextBG(BG_B,"Swordsman",28,7);
+    VDP_drawTextBG(BG_B,"Floor ",28,5);
+    VDP_drawTextBG(BG_B,"Yorbs",28,11);
+    VDP_drawTextBG(BG_B,"Score",28,23);
+}
+
+void game_draw_hud_text()
+{
+    if (!update_hud)
+    return;
+    char str[10];
+    
+    intToStr(floor_current,str,2);
+    VDP_drawTextBG(BG_B,str,34,5);
+
+    //HP
     VDP_drawTextBG(BG_B,"*****",30,9);
 
-    VDP_drawTextBG(BG_B,"Yorbs",28,11);
-    sprintf(str, "%02d / 50", yorb_count);
+    //Yorbs
+    intToStr(yorb_count,str,3);
     VDP_drawTextBG(BG_B,str,30,13);
 
-    VDP_drawTextBG(BG_B,"Treasure",28,15);
-    VDP_drawTextBG(BG_B,"000",31,17);
-
-    sprintf(str, "%04d", step_count);
-    VDP_drawTextBG(BG_B,"Steps",28,19);
-    VDP_drawTextBG(BG_B,str,31,21);
-
-    VDP_drawTextBG(BG_B,"Score",28,23);
-    VDP_drawTextBG(BG_B,"00000",31,25);
-
+    //Score
+    intToStr(0,str,3);
+    VDP_drawTextBG(BG_B,str,31,25);
+    update_hud=false;
 }
 
 void game_run_gate()
@@ -88,7 +93,7 @@ void game_run_gate()
         player->facing_dir+=1;
         if (player->facing_dir > DIR_DOWN)
         player->facing_dir=0;
-        actor_turn(player);
+        actor_face_dir(player);
     }
     play_y=WINDOW_Y+player->y * 16 - 4 + player->scroll_y;
     if (play_y<-16)

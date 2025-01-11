@@ -12,7 +12,7 @@ void system_init()
 	JOY_setEventHandler(&input_update);
     PAL_setPalette(PAL0, frame.palette->data, DMA);
 	VDP_loadFont(custom_font.tileset, DMA);
-    gm_current=GM_TITLE;
+    gm_current=GM_GAME;
 	
 	gm_start(gm_current);
 }

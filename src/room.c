@@ -11,10 +11,12 @@ void room_init()
     gm_timer=0;
     
     BG_display_frame();
+    game_draw_hud_labels();
     game_draw_hud_text();
     
     
     game_pixels_scrolled=0;
+    update_hud=true;
     
     u8 x,y,i;
     x=0;

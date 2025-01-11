@@ -12,7 +12,6 @@ int main()
 		
 		SYS_doVBlankProcess();
 		transition_animate();
-		
 	}
 	return (0);
 }

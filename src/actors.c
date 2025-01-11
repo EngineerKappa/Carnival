@@ -85,6 +85,29 @@ void actors_update()
     }
 }
 
+void actor_face_dir(Actor* a)
+{
+    switch (a->facing_dir) 
+	{
+		case DIR_RIGHT:
+			SPR_setAnim(a->sprite, 1);
+			SPR_setHFlip(a->sprite,false);
+			break;
+		case DIR_UP:
+			SPR_setAnim(a->sprite, 2);
+			SPR_setHFlip(a->sprite,false);
+			break;
+		case DIR_DOWN:
+			SPR_setAnim(a->sprite, 0);
+			SPR_setHFlip(a->sprite,false);
+			break;
+		case DIR_LEFT:
+			SPR_setAnim(a->sprite, 1);
+			SPR_setHFlip(a->sprite,true);
+			break;
+	}
+}
+
 void actor_turn(Actor* a)
 {
 	a->target_x=a->x;
@@ -94,23 +117,15 @@ void actor_turn(Actor* a)
 	{
 		case DIR_RIGHT:
 			a->target_x=a->x+1;
-			SPR_setAnimAndFrame(player->sprite, 1, player->frame);
-			SPR_setHFlip(player->sprite,false);
 			break;
 		case DIR_UP:
 			a->target_y=a->y-1;
-			SPR_setAnimAndFrame(a->sprite, 2, a->frame);
-			SPR_setHFlip(a->sprite,false);
 			break;
 		case DIR_DOWN:
 			a->target_y=a->y+1;
-			SPR_setAnimAndFrame(a->sprite, 0, a->frame);
-			SPR_setHFlip(a->sprite,false);
 			break;
 		case DIR_LEFT:
 			a->target_x=a->x-1;
-			SPR_setAnimAndFrame(a->sprite, 1, a->frame);
-			SPR_setHFlip(a->sprite,true);
 			break;
 	}
 
@@ -191,16 +206,61 @@ void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir)
     Actor *a = &actors[actor_find_empty_slot()];
     actor_set_defaults(a);
 
-    a->type = OBJ_YORB;
+    a->type = OBJ_BONEYM;
     a->x = spawn_x;
     a->y = spawn_y;
-
+    a->facing_dir=facing_dir;
+    a->act_move_start=boneym_move;
     a->sprite = SPR_addSprite(&spr_boneym,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
     SPR_setAutoTileUpload(a->sprite, FALSE);
-    SPR_setFrame(a->sprite,0);
+    actor_face_dir(a);
     SPR_setFrameChangeCallback(a->sprite, &boneym_animate);
     boneym_animate(a->sprite);
+    
     actors_spawned++;
+}
+
+
+void boneym_move(Actor * a)
+{
+    int16_t px = player->x;
+    int16_t py = player->y;
+    int16_t ax = a->x;
+    int16_t ay = a->y;
+    u16 target_dist=((ax+1-px)*(ax+1-px))+((ay-py)*(ay-py));
+    u16 prev_dist=target_dist;
+    u8 new_dir=DIR_RIGHT;
+
+    //Check up
+    target_dist=((ax-px)*(ax-px))+((ay-1-py)*(ay-1-py));
+    if (target_dist < prev_dist)
+    {
+        new_dir=DIR_UP;
+        prev_dist=target_dist;
+    }
+    //Check left
+    target_dist=((ax-1-px)*(ax-1-px))+((ay-py)*(ay-py));
+    if (target_dist < prev_dist)
+    {
+        new_dir=DIR_LEFT;
+        prev_dist=target_dist;
+    }
+    //Check Down
+    target_dist=((ax-px)*(ax-px))+((ay+1-py)*(ay+1-py));
+    if (target_dist < prev_dist)
+    {
+        new_dir=DIR_DOWN;
+    }
+    a->facing_dir=new_dir;
+    actor_face_dir(a);
+    actor_turn(a);
+    
+    
+}
+
+void boneym_attack(Actor * a)
+{
+    
 }
 
 void boneym_animate(Sprite* sprite)
@@ -237,10 +297,10 @@ void yorb_collect(Actor * a)
 {
     a->type=OBJ_EFFECT;
     yorb_count++;
-    game_draw_hud_text();
     SPR_setAnim(a->sprite,1);
     a->act_realtime=effect_run;
     XGM2_playPCM(snd_yorb,sizeof(snd_yorb),SOUND_PCM_CH2);
+    update_hud=true;
     
 }
 
