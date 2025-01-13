@@ -21,7 +21,6 @@ void room_init()
     u8 x,y,i;
     x=0;
     y=0;
-
     for (i=0; i<ROOM_MAX_TILES; i++)
     {
         switch (room_data[i]) 
@@ -56,6 +55,7 @@ void room_init()
                 spawn_boneym(x,y,DIR_LEFT);
                 break;
             default:
+                
                 place_tile(x,y,room_data[i]);
         }
         
@@ -90,24 +90,24 @@ void room_end()
 void place_floor(u8 x, u8 y)
 {
     u8 tile = 0;
-    if ((x==ROOM_SIZE) | (tile_check_wall(x + 1, y,false)))
+    if (tiledefs[room_data[x+1 + (y*13)]]==TD_SOLID)
     tile=1;
+
     place_tile(x,y,tile);
 }
 
 bool tile_check_wall(u8 x, u8 y, bool check_actors)
 {
-    u8 tile=room_data[x + (y*13)];
-    if (tiledefs[tile]==TD_SOLID && tile < RS_PLAYER) 
-    {
-        return true;
-    }
-
-    return false;
+    return blockmap[x + (y*13)];
 }
 
 void place_tile(u8 x,u8 y,u8 start_tile)
 {
+    if (tiledefs[start_tile]==TD_SOLID)
+    blockmap[x + (y*13)]=true;
+    else
+    blockmap[x + (y*13)]=false;
+
     start_tile*=4;
     VDP_setTileMapXY(BG_B, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind+start_tile),  1+x*2,1+y*2);
     VDP_setTileMapXY(BG_B, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind+start_tile+1), 1+x*2+1,1+y*2);

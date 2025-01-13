@@ -23,6 +23,8 @@ typedef void (*FunctionPointer)(struct Actor*);
 #define DIR_LEFT 3
 #define DIR_DOWN 4
 
+
+
 typedef struct Actor {
     FunctionPointer act_realtime;
     FunctionPointer act_move_start;
@@ -53,6 +55,8 @@ u16** sprite_index_gate;
 u16** sprite_index_boneym;
 u16** sprite_index_pointy;
 
+void actor_set_blockmap(Actor * a);
+void actor_clear_blockmap(Actor * a);
 
 u8 actor_find_empty_slot();
 void actor_free(Actor* a);

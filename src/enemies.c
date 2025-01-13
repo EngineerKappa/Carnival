@@ -31,7 +31,6 @@ void boneym_move(Actor * a)
     int8_t ax = a->x;
     int8_t ay = a->y;
     u8 new_dir = 5;
-    bool canmove=false;
     u16 dir_dist[4];
 
    // target_dist=((ax+1-px)*(ax+1-px))+((ay-py)*(ay-py));   
@@ -45,7 +44,6 @@ void boneym_move(Actor * a)
         target_y=ay+dir_get_y(dir_check);
         if (!tile_check_wall(target_x,target_y,true))
         {
-            canmove=true;
             dir_dist[dir_check]=((target_x-px)*(target_x-px))+((target_y-py)*(target_y-py));
             if (dir_dist[dir_check]<=min_dist)
             {
@@ -86,7 +84,8 @@ void boneym_move(Actor * a)
         }
         
     }
-    actor_face_dir(a);    
+    actor_face_dir(a);
+    actor_set_blockmap(a);
 }
 
 void boneym_attack(Actor * a)

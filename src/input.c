@@ -59,6 +59,7 @@ bool input_player_check()
 	player->facing_dir=dir;
 	actor_face_dir(player);
 	actor_move_forward(player);
+	actor_set_blockmap(player);
 	return true;
 }
 

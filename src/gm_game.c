@@ -11,7 +11,7 @@ void game_init()
     PAL_setPalette(PAL1, spr_swordsman.palette->data, DMA);
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     
-    floor_current=3;
+    floor_current=1;
     yorb_count=0;
     step_count=0;
     func_update=game_update;

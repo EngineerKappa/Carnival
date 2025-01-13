@@ -180,6 +180,7 @@ void game_move_actors()
     }
 }
 
+
 void actor_move(Actor* a)
 {
     if (a->x > a->target_x)
@@ -215,15 +216,34 @@ void game_run_actors_realtime()
     }
 }
 
+void actor_set_blockmap(Actor * a)
+{
+    blockmap[a->x + (a->y*13    )]=true;
+    blockmap[a->target_x + (a->target_y*13)]=true;
+    //place_tile(a->x,a->y,2);
+    //place_tile(a->target_x,a->target_y,2);
+
+}
+void actor_clear_blockmap(Actor * a)
+{
+    blockmap[a->x + (a->y*13)]=false;
+    //place_tile(a->x,a->y,0);
+}
+
 void actor_move_finish(Actor * a)
 {
+    actor_clear_blockmap(a);
     a->x=a->target_x;
     a->y=a->target_y;
     a->scroll_x=0;
     a->scroll_y=0;
     SPR_setPosition(a->sprite,WINDOW_X+a->x * 16 + a->scroll_x, WINDOW_Y+a->y * 16 - 4 + a->scroll_y);
+    actor_set_blockmap(a);
     if ((a->type != OBJ_EMPTY)  && (a->act_move_finish!=NULL))
+    {
+        
         a->act_move_finish(a);
+    }
 }
 
 void spawn_yorb(int spawn_x,int spawn_y)
