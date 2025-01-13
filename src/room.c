@@ -90,19 +90,19 @@ void room_end()
 void place_floor(u8 x, u8 y)
 {
     u8 tile = 0;
-    if ((x==ROOM_SIZE) | (tile_check_wall(x + 1, y)))
+    if ((x==ROOM_SIZE) | (tile_check_wall(x + 1, y,false)))
     tile=1;
     place_tile(x,y,tile);
 }
 
-bool tile_check_wall(u8 x, u8 y)
+bool tile_check_wall(u8 x, u8 y, bool check_actors)
 {
     u8 tile=room_data[x + (y*13)];
-
     if (tiledefs[tile]==TD_SOLID && tile < RS_PLAYER) 
     {
         return true;
     }
+
     return false;
 }
 

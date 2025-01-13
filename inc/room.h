@@ -2,6 +2,7 @@
 #define ROOM_MAX_TILES 169
 typedef u8 room[ROOM_MAX_TILES];
 room room_data;
+bool blockmap[ROOM_MAX_TILES];
 room* room_list[50];
 u8 MAX_ROOMS;
 
@@ -40,7 +41,7 @@ enum {
 
 extern const u8 tiledefs[16];
 
-bool tile_check_wall(u8 x, u8 y);
+bool tile_check_wall(u8 x, u8 y, bool check_actors);
 
 
 enum {

@@ -108,39 +108,64 @@ void actor_face_dir(Actor* a)
 	}
 }
 
-void actor_turn(Actor* a)
+bool actor_move_forward(Actor* a)
 {
-	a->target_x=a->x;
-	a->target_y=a->y;
+    u8 dir=a->facing_dir;
+    int8_t target_x,target_y;
+    target_x=a->x + dir_get_x(dir);
+    target_y=a->y + dir_get_y(dir);
 
-	switch (a->facing_dir) 
+    if (!tile_check_wall(target_x,target_y,true))
+    {
+        a->target_x=target_x;
+	    a->target_y=target_y;
+        return true;
+    }
+    {
+        return false;
+    }
+}
+
+int8_t dir_get_x(u8 dir)
+{
+    switch (dir) 
 	{
 		case DIR_RIGHT:
-			a->target_x=a->x+1;
-			break;
+			return 1;
 		case DIR_UP:
-			a->target_y=a->y-1;
-			break;
+			return 0;
 		case DIR_DOWN:
-			a->target_y=a->y+1;
-			break;
+			return 0;
 		case DIR_LEFT:
-			a->target_x=a->x-1;
-			break;
+			return -1;
+		default:
+            return 0;
 	}
+}
 
-    if (tile_check_wall(a->target_x,a->target_y))
-    {
-        a->target_x=a->x;
-	    a->target_y=a->y;
-    }
-
+int8_t dir_get_y(u8 dir)
+{
+    switch (dir) 
+	{
+		case DIR_RIGHT:
+			return 0;
+		case DIR_UP:
+			return -1;
+		case DIR_DOWN:
+			return 1;
+		case DIR_LEFT:
+			return 0;
+        default:
+            return 0;
+	}
 }
 
 void actor_set_position(Actor* a, u8 target_x,u8 target_y)
 {
     a->x=target_x;
     a->y=target_y;
+    a->target_x=target_x;
+    a->target_y=target_y;
     SPR_setPosition(a->sprite,WINDOW_X+a->x * 16,WINDOW_Y+a->y * 16 - 4);
 }
 
@@ -199,74 +224,6 @@ void actor_move_finish(Actor * a)
     SPR_setPosition(a->sprite,WINDOW_X+a->x * 16 + a->scroll_x, WINDOW_Y+a->y * 16 - 4 + a->scroll_y);
     if ((a->type != OBJ_EMPTY)  && (a->act_move_finish!=NULL))
         a->act_move_finish(a);
-}
-
-void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir)
-{
-    Actor *a = &actors[actor_find_empty_slot()];
-    actor_set_defaults(a);
-
-    a->type = OBJ_BONEYM;
-    a->x = spawn_x;
-    a->y = spawn_y;
-    a->facing_dir=facing_dir;
-    a->act_move_start=boneym_move;
-    a->sprite = SPR_addSprite(&spr_boneym,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
-    SPR_setAutoTileUpload(a->sprite, FALSE);
-    actor_face_dir(a);
-    SPR_setFrameChangeCallback(a->sprite, &boneym_animate);
-    boneym_animate(a->sprite);
-    
-    actors_spawned++;
-}
-
-
-void boneym_move(Actor * a)
-{
-    int16_t px = player->x;
-    int16_t py = player->y;
-    int16_t ax = a->x;
-    int16_t ay = a->y;
-    u16 target_dist=((ax+1-px)*(ax+1-px))+((ay-py)*(ay-py));
-    u16 prev_dist=target_dist;
-    u8 new_dir=DIR_RIGHT;
-
-    //Check up
-    target_dist=((ax-px)*(ax-px))+((ay-1-py)*(ay-1-py));
-    if (target_dist < prev_dist)
-    {
-        new_dir=DIR_UP;
-        prev_dist=target_dist;
-    }
-    //Check left
-    target_dist=((ax-1-px)*(ax-1-px))+((ay-py)*(ay-py));
-    if (target_dist < prev_dist)
-    {
-        new_dir=DIR_LEFT;
-        prev_dist=target_dist;
-    }
-    //Check Down
-    target_dist=((ax-px)*(ax-px))+((ay+1-py)*(ay+1-py));
-    if (target_dist < prev_dist)
-    {
-        new_dir=DIR_DOWN;
-    }
-    a->facing_dir=new_dir;
-    actor_face_dir(a);
-    actor_turn(a);
-    
-    
-}
-
-void boneym_attack(Actor * a)
-{
-    
-}
-
-void boneym_animate(Sprite* sprite)
-{
-    u16 tileIndex = sprite_index_boneym[sprite->animInd][sprite->frameInd];
-    SPR_setVRAMTileIndex(sprite,tileIndex);
 }
 
 void spawn_yorb(int spawn_x,int spawn_y)

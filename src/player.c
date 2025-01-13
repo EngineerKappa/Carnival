@@ -30,7 +30,7 @@ void player_reset()
     player->scroll_y = 0;
     SPR_setPriority(player->sprite,false);
     actor_face_dir(player);
-    actor_turn(player);
+    actor_move_forward(player);
 
 }
 

@@ -13,7 +13,6 @@ void game_check_turn()
 		gm_state=GAME_STATE_MOVE;
 		actors_update();
 		turn_updated=true;
-
 		if (player->frame == 0)
 		{
 			player->frame = 1;
@@ -59,7 +58,7 @@ bool input_player_check()
 	}	
 	player->facing_dir=dir;
 	actor_face_dir(player);
-	actor_turn(player);
+	actor_move_forward(player);
 	return true;
 }
 

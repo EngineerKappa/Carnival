@@ -75,7 +75,7 @@ void game_draw_hud_text()
 
 void game_run_gate()
 {
-    int play_y;
+    int16_t play_y;
     if (gm_timer==0)
     {
         gate_speed=0;

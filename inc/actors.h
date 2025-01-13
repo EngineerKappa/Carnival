@@ -17,6 +17,7 @@ enum
 struct Actor;
 typedef void (*FunctionPointer)(struct Actor*);
 
+#define DIR_NONE 0
 #define DIR_RIGHT 1
 #define DIR_UP 2
 #define DIR_LEFT 3
@@ -27,8 +28,8 @@ typedef struct Actor {
     FunctionPointer act_move_start;
     FunctionPointer act_move_finish;
     Sprite* sprite;
-    int16_t x, y;
-    int16_t target_x, target_y;
+    int8_t x, y;
+    int8_t target_x, target_y;
     int16_t scroll_x,scroll_y; 
     u16 timer;
     u8 facing_dir;
@@ -60,12 +61,11 @@ void actors_clear_all(bool delete_player);
 
 void spawn_yorb(int spawn_x,int spawn_y);
 void spawn_gate(int spawn_x,int spawn_y);
-void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir);
-void spawn_pointy(int spawn_x,int spawn_y,u8 facing_dir);
+
 
 void yorb_animate(Sprite* sprite);
 void gate_animate(Sprite* sprite);
-void boneym_animate(Sprite* sprite);
+
 void boneym_move(Actor * a);
 void boneym_attack(Actor * a);
 void pointy_animate(Sprite* sprite);
@@ -77,6 +77,7 @@ void effect_run(Actor * a);
 void actors_update();
 void actors_init();
 
+void actor_set_defaults(Actor *a);
 void actor_set_position(Actor* a, u8 target_x,u8 target_y);
 void game_move_actors();
 void game_run_actors_realtime();
@@ -84,7 +85,13 @@ void actor_move(Actor* a);
 void game_move_end();
 void actor_move_finish(Actor * a);
 void actor_face_dir(Actor* a);
-void actor_turn(Actor* a);
+bool actor_move_forward(Actor* a);
 void actors_update();
+int8_t dir_get_x(u8 dir);
+int8_t dir_get_y(u8 dir);
+
+void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir);
+void spawn_pointy(int spawn_x,int spawn_y,u8 facing_dir);
+void boneym_animate(Sprite* sprite);
 
 bool turn_updated;
