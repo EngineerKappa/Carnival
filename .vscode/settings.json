@@ -25,6 +25,7 @@
     "gm_game.h": "c",
     "gm_title.h": "c",
     "transition.h": "c",
-    "room.h": "c"
+    "room.h": "c",
+    "headers.h": "c"
 }
 }

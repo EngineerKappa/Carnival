@@ -9,6 +9,22 @@ void game_check_turn()
 	
 	if (input_player_check())
 	{
+
+		u8 i;
+		for(i = 0; i < MAX_ACTORS; i++)
+		{
+			Actor* a = &actors[i];
+			
+			if (a->type == OBJ_BONEYM && a->x == player->x+dir_get_x(player->facing_dir) && a->y == player->y+dir_get_y(player->facing_dir))
+			{
+				gm_state=GAME_STATE_ATTACK;
+				gm_timer=0;
+				actor_attacking=player;
+				actor_defending=a;
+				return;
+			}
+		}
+		
 		step_count++;
 		gm_state=GAME_STATE_MOVE;
 		actors_update();
@@ -57,6 +73,9 @@ bool input_player_check()
 		return false;
 	}	
 	player->facing_dir=dir;
+
+	
+
 	actor_face_dir(player);
 	actor_move_forward(player);
 	actor_set_blockmap(player);

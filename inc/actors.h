@@ -29,10 +29,12 @@ typedef struct Actor {
     FunctionPointer act_realtime;
     FunctionPointer act_move_start;
     FunctionPointer act_move_finish;
+    FunctionPointer act_counterattack;
     Sprite* sprite;
     int8_t x, y;
     int8_t target_x, target_y;
     int16_t scroll_x,scroll_y; 
+    u8 hp;
     u16 timer;
     u8 facing_dir;
     u8 state;
@@ -45,6 +47,13 @@ typedef struct Actor {
 
 Actor *player;
 Actor *gate;
+
+Actor *actor_defending;
+Actor *actor_attacking;
+Actor* attacker_list[4];
+u16 actor_defending_palette;
+u8 attacker_count;
+bool actor_defending_will_counter;
 u8 actors_spawned;
 #define MAX_ACTORS 80
 Actor actors[MAX_ACTORS];
@@ -54,6 +63,8 @@ u16** sprite_index_yorb;
 u16** sprite_index_gate;
 u16** sprite_index_boneym;
 u16** sprite_index_pointy;
+
+
 
 void actor_set_blockmap(Actor * a);
 void actor_clear_blockmap(Actor * a);
@@ -70,6 +81,7 @@ void spawn_gate(int spawn_x,int spawn_y);
 void yorb_animate(Sprite* sprite);
 void gate_animate(Sprite* sprite);
 
+void boneym_turn_start(Actor * a);
 void boneym_move(Actor * a);
 void boneym_attack(Actor * a);
 void pointy_animate(Sprite* sprite);
@@ -93,9 +105,13 @@ bool actor_move_forward(Actor* a);
 void actors_update();
 int8_t dir_get_x(u8 dir);
 int8_t dir_get_y(u8 dir);
+u8 dir_get_180(u8 dir);
+void enemy_take_damage(Actor * a);
 
 void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir);
 void spawn_pointy(int spawn_x,int spawn_y,u8 facing_dir);
 void boneym_animate(Sprite* sprite);
 
 bool turn_updated;
+
+

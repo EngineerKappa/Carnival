@@ -160,6 +160,24 @@ int8_t dir_get_y(u8 dir)
 	}
 }
 
+u8 dir_get_180(u8 dir)
+{
+    switch (dir) 
+	{
+		case DIR_RIGHT:
+			return DIR_LEFT;
+		case DIR_UP:
+			return DIR_DOWN;
+		case DIR_DOWN:
+			return DIR_UP;
+		case DIR_LEFT:
+			return DIR_RIGHT;
+        default:
+            return 0;
+	}
+}
+
+
 void actor_set_position(Actor* a, u8 target_x,u8 target_y)
 {
     a->x=target_x;
@@ -260,6 +278,7 @@ void spawn_yorb(int spawn_x,int spawn_y)
     s16 frame = (((a->x + a->y)) % 4);
     SPR_setFrame(a->sprite,frame);
     SPR_setFrameChangeCallback(a->sprite, &yorb_animate);
+    SPR_setDepth(a->sprite,SPR_MAX_DEPTH);
     yorb_animate(a->sprite);
     actors_spawned++;
 }
