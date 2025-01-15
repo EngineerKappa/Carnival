@@ -6,6 +6,7 @@
 #define ROOM_SIZE 12 //Every Room is square, this is both X and Y
 
 u16 VRAM_ind;
+u16 UI_VRAM_ind;
 u16 BG_VRAM_ind;
 u16 SPR_VRAM_ind;
 s16 background_x;

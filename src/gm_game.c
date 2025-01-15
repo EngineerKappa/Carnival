@@ -45,20 +45,106 @@ void game_run_move()
     }
 }
 
-void game_run_attack()
+void game_run_death()
 {
     if (gm_timer==0)
     {
+        XGM2_playPCM(snd_wilhelm,sizeof(snd_wilhelm),SOUND_PCM_CH2);
+    }
+
+    if (player_hp==0 && gm_timer < 30 && (gm_timer % 2 == 0))
+    {
+        player->facing_dir++;
+        actor_face_dir(player);
+    }
+
+    if (gm_timer==30)
+    {
+        SPR_setAnim(player->sprite,2);
+        SPR_setVFlip(player->sprite,true);
+    }
+
+    if (gm_timer==60)
+    {
+        SPR_setAnim(player->sprite,2);
+        SPR_setVFlip(player->sprite,true);        
+        //transition_start(game_init);
+    }
+
+    if (gm_timer==90)
+    {
+        gm_state=GAME_STATE_GAMEOVER;
+        VDP_setHilightShadow(true);
+        if (random() % 5 > 1)
+        {
+            XGM2_play(bgm_gameover1);
+        }
+        else
+        {
+            XGM2_play(bgm_gameover2);
+        }
+    }
+    gm_timer++;
+}
+
+void game_run_attack()
+{
+    if (gm_timer<15)
+    {
+        actor_defending_shake=-actor_defending_shake;
+        if (actor_defending_shake>0)
+        actor_defending_shake--;
+        if (actor_defending_shake<0)
+        actor_defending_shake++;
+
+        if (actor_defending->facing_dir== DIR_DOWN || actor_defending ->facing_dir == DIR_UP)
+        {
+            actor_defending->scroll_y=+(dir_get_y(actor_attacking->facing_dir)*3) +actor_defending_shake;
+        }
+        else
+        {
+            actor_defending->scroll_x=+(dir_get_x(actor_attacking->facing_dir)*3) +actor_defending_shake;
+        }
+    }
+    
+    
+    if (gm_timer==0)
+    {
+        actor_defending_shake=6;
         actor_defending_will_counter=false;
+        actor_attacking->scroll_x=dir_get_x(actor_attacking->facing_dir)*3;
+        actor_attacking->scroll_y=dir_get_y(actor_attacking->facing_dir)*3;
+
+        //int8_t newx=actor_defending->x+dir_get_x(actor_attacking->facing_dir);
+        //int8_t newy=actor_defending->y+dir_get_y(actor_attacking->facing_dir);
+        //if (!tile_check_wall(newx,newy,true))
+        //{
+        //    actor_clear_blockmap(actor_defending);
+        //    actor_defending->x=newx;
+        //    actor_defending->y=newy;
+        //    actor_defending->target_x=newx;
+        //    actor_defending->target_y=newy;
+        //    actor_set_blockmap(actor_defending);
+        //}
         
         
         if (actor_defending==player)
         {
-            XGM2_playPCM(snd_hurt,sizeof(snd_hurt),SOUND_PCM_CH2);
+            
             actor_defending_palette=PAL1;
+            player_hp-=1;
+            XGM2_playPCM(snd_hurt,sizeof(snd_hurt),SOUND_PCM_CH2);
+            if (player_hp==0)
+            {
+                XGM2_stop();
+                
+            }
+            update_hud=true;
         }
         else
         {
+            actor_attacking->frame = 0;
+            actor_face_dir(actor_attacking);
             XGM2_playPCM(snd_hit,sizeof(snd_hit),SOUND_PCM_CH2);
             actor_defending_palette=PAL0;
             u8 damage=2;
@@ -84,8 +170,46 @@ void game_run_attack()
             actor_face_dir(actor_defending);
             enemy_take_damage(actor_defending);
         }
+
+        
     }
 
+    if (gm_timer == 5)
+    {
+        actor_attacking->frame = 1;
+        actor_face_dir(actor_attacking);
+    }
+
+    if (gm_timer == 15)
+    {
+        actor_attacking->frame = 0;
+        actor_face_dir(actor_attacking);
+    }
+
+    if (gm_timer>15)
+    {
+        if (actor_attacking->scroll_x>0)
+        actor_attacking->scroll_x--;
+        if (actor_attacking->scroll_x<0)
+        actor_attacking->scroll_x++;
+        if (actor_attacking->scroll_y>0)
+        actor_attacking->scroll_y--;
+        if (actor_attacking->scroll_y<0)
+        actor_attacking->scroll_y++;
+    }
+
+    if (gm_timer > 20)
+    {
+        if (actor_defending->scroll_x>0)
+        actor_defending->scroll_x--;
+        if (actor_defending->scroll_x<0)
+        actor_defending->scroll_x++;
+        if (actor_defending->scroll_y>0)
+        actor_defending->scroll_y--;
+        if (actor_defending->scroll_y<0)
+        actor_defending->scroll_y++;
+    }
+    
 
     if (gm_timer % 10 == 0)
     {
@@ -97,14 +221,29 @@ void game_run_attack()
         SPR_setPalette(actor_defending->sprite,actor_defending_palette);
     }
 
-    if (gm_timer==30)
+    if (player_hp==0 && gm_timer == 20)
     {
+        SPR_setPalette(actor_defending->sprite,actor_defending_palette);
+        gm_timer=0;
+        gm_state=GAME_STATE_DEATH;
+        SPR_setPosition(actor_defending->sprite,WINDOW_X+actor_defending->x * 16 + actor_defending->scroll_x, WINDOW_Y+actor_defending->y * 16 - 4 + actor_defending->scroll_y);
+        SPR_setPosition(actor_attacking->sprite,WINDOW_X+actor_attacking->x * 16 + actor_attacking->scroll_x, WINDOW_Y+actor_attacking->y * 16 - 4 + actor_attacking->scroll_y);
+        return;
+    }
+
+    if (gm_timer==30)
+    {       
         SPR_setPalette(actor_defending->sprite,actor_defending_palette);
         gm_timer=0;
         if (!actor_defending_will_counter)
         {
+            
             attacker_count=0;
-            gm_state=GAME_STATE_NORMAL;
+            if (player_hp>0)
+            {
+                gm_state=GAME_STATE_NORMAL;
+                
+            }
         }
         else
         {
@@ -117,6 +256,8 @@ void game_run_attack()
         }
     }
 
+    SPR_setPosition(actor_defending->sprite,WINDOW_X+actor_defending->x * 16 + actor_defending->scroll_x, WINDOW_Y+actor_defending->y * 16 - 4 + actor_defending->scroll_y);
+    SPR_setPosition(actor_attacking->sprite,WINDOW_X+actor_attacking->x * 16 + actor_attacking->scroll_x, WINDOW_Y+actor_attacking->y * 16 - 4 + actor_attacking->scroll_y);
     gm_timer++;
 }
 
@@ -142,12 +283,18 @@ void game_update()
         game_run_attack();
         break;
 
+        case GAME_STATE_DEATH:
+        game_run_death();
+        break;
+
         case GAME_STATE_GATE:
         game_run_gate();
         break;
     }
-
-    game_run_actors_realtime();
+    if (gm_state!=GAME_STATE_GAMEOVER)
+    {
+        game_run_actors_realtime();
+    }
 }
 
 void game_run_gate()

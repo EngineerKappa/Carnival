@@ -4,6 +4,7 @@ IMAGE custom_font  "gfx/font.png" BEST NONE
 
 #IMAGE bg_nohbodee "gfx/nohbodee.png" BEST ALL
 TILESET ui_tileset "map/uiframe.png" BEST
+TILESET ui_icon_tiles "gfx/textboxframe.png" BEST
 
 PALETTE castle_palette "gfx/tiles.png"
 TILESET castle_tileset "gfx/tiles.png" BEST

@@ -52,6 +52,7 @@ Actor *actor_defending;
 Actor *actor_attacking;
 Actor* attacker_list[4];
 u16 actor_defending_palette;
+int8_t actor_defending_shake;
 u8 attacker_count;
 bool actor_defending_will_counter;
 u8 actors_spawned;

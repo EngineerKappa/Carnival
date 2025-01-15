@@ -11,6 +11,7 @@ void BG_init()
 	background_x = 0;
 	background_y = 0;
 	VRAM_ind = TILE_USER_INDEX;
+	UI_VRAM_ind = TILE_USER_INDEX;
 	BG_VRAM_ind = TILE_USER_INDEX;
 	SPR_VRAM_ind = TILE_SPRITE_INDEX;
 }
@@ -22,6 +23,9 @@ void BG_load_frame()
 	VDP_loadTileSet(&ui_tileset, VRAM_ind, DMA);
 	bgb = MAP_create(&ui_map, BG_B, TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, VRAM_ind));
 	VRAM_ind += ui_tileset.numTile;
+	UI_VRAM_ind = VRAM_ind;
+	VDP_loadTileSet(&ui_icon_tiles,UI_VRAM_ind,DMA);
+	VRAM_ind+=ui_icon_tiles.numTile;
 	BG_VRAM_ind = VRAM_ind;
 	//Load Tilemaps
 	

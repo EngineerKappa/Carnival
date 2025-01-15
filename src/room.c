@@ -17,7 +17,8 @@ void room_init()
     
     game_pixels_scrolled=0;
     update_hud=true;
-    
+    attacker_count=0;
+    actor_defending_shake=0;
     u8 x,y,i;
     x=0;
     y=0;

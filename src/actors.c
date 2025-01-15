@@ -87,22 +87,24 @@ void actors_update()
 
 void actor_face_dir(Actor* a)
 {
+    if (a->facing_dir>DIR_DOWN)
+    a->facing_dir=DIR_RIGHT;
     switch (a->facing_dir) 
 	{
 		case DIR_RIGHT:
-			SPR_setAnim(a->sprite, 1);
+			SPR_setAnimAndFrame(a->sprite, 1,a->frame);
 			SPR_setHFlip(a->sprite,false);
 			break;
 		case DIR_UP:
-			SPR_setAnim(a->sprite, 2);
+			SPR_setAnimAndFrame(a->sprite, 2,a->frame);
 			SPR_setHFlip(a->sprite,false);
 			break;
 		case DIR_DOWN:
-			SPR_setAnim(a->sprite, 0);
+			SPR_setAnimAndFrame(a->sprite, 0,a->frame);
 			SPR_setHFlip(a->sprite,false);
 			break;
 		case DIR_LEFT:
-			SPR_setAnim(a->sprite, 1);
+			SPR_setAnimAndFrame(a->sprite, 1,a->frame);
 			SPR_setHFlip(a->sprite,true);
 			break;
 	}

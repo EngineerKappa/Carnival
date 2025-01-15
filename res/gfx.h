@@ -5,6 +5,7 @@ extern const Palette palette_all;
 extern const Palette pal_swordsman;
 extern const Image custom_font;
 extern const TileSet ui_tileset;
+extern const TileSet ui_icon_tiles;
 extern const Palette castle_palette;
 extern const TileSet castle_tileset;
 extern const MapDefinition ui_map;
