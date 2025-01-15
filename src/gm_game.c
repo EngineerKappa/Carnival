@@ -8,6 +8,7 @@ void game_init()
     actors_clear_all(true);
     actors_init();
     VDP_loadTileSet(&castle_tileset,BG_VRAM_ind,DMA);
+    VRAM_ind+=castle_tileset.numTile;
     PAL_setPalette(PAL1, spr_swordsman.palette->data, DMA);
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     PAL_setPalette(PAL3, palette_red, DMA);
@@ -67,14 +68,17 @@ void game_run_death()
     if (gm_timer==60)
     {
         SPR_setAnim(player->sprite,2);
-        SPR_setVFlip(player->sprite,true);        
+        SPR_setVFlip(player->sprite,true);
+        PAL_fadeOutPalette(PAL2,30,true);       
         //transition_start(game_init);
     }
 
     if (gm_timer==90)
     {
+        actors_clear_all(false);
         gm_state=GAME_STATE_GAMEOVER;
-        VDP_setHilightShadow(true);
+        VDP_drawImageEx(BG_A,&bg_gameover,TILE_ATTR_FULL(PAL0, true, false, false, VRAM_ind),3,2,false,true);
+        
         if (random() % 5 > 1)
         {
             XGM2_play(bgm_gameover1);

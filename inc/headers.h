@@ -9,5 +9,6 @@
 #include <actors.h>
 #include <player.h>
 #include <room.h>
+#include <menus.h>
 
 #include <transition.h>

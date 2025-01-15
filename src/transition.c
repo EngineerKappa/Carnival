@@ -63,7 +63,7 @@ void transition_animate_enter()
 
 
 
-    if (transition_scroll>40)
+    if (transition_scroll>28)
     {
         transition_state=2;
         transition_scroll=0;
