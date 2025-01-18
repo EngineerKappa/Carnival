@@ -41,8 +41,6 @@ typedef struct Actor {
     u8 frame;
     u8 type;
     bool hflip, vflip;
-    
-    
 } Actor;
 
 Actor *player;
@@ -89,7 +87,7 @@ void pointy_animate(Sprite* sprite);
 
 void yorb_collect(Actor * a);
 
-void effect_run(Actor * a);
+void effect_update(Actor * a);
 
 void actors_update();
 void actors_init();
@@ -97,7 +95,7 @@ void actors_init();
 void actor_set_defaults(Actor *a);
 void actor_set_position(Actor* a, u8 target_x,u8 target_y);
 void game_move_actors();
-void game_run_actors_realtime();
+void game_update_actors_realtime();
 void actor_move(Actor* a);
 void game_move_end();
 void actor_move_finish(Actor * a);

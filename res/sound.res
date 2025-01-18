@@ -1,6 +1,6 @@
 XGM2 bgm_title "bgm/title.vgm"
 XGM2 bgm_cutscene "bgm/cutscene.vgm"
-XGM2 bgm_fjf "bgm/fjf.vgm"
+XGM2 bgm_fjf "bgm/Boss - Cinge (Ultimate).vgm"
 XGM2 bgm_gameover1 "bgm/gameover1.vgm"
 XGM2 bgm_gameover2 "bgm/gameover2.vgm"
 

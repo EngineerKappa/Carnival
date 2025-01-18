@@ -112,13 +112,5 @@ void transition_animate_exit()
     }
 }
 
-void transition_title_start_game()
-{
-    gm_change(GM_GAME);
-}
 
-void transition_room_next()
-{
-    room_end();
-    room_init();
-}
+

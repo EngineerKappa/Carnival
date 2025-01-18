@@ -76,16 +76,25 @@ void room_load()
     memcpy(room_data,room_list[floor_current],n);
 }
 
-void room_end()
+void room_end(bool restart)
 {
     SPR_defragVRAM();
     VDP_setHilightShadow(false);
     actors_clear_all(false);
-    floor_current ++;
-    if (floor_current>MAX_ROOMS)
-    floor_current=1;
 
+    if (!restart)
+    {
+        floor_current ++;
+        if (floor_current>MAX_ROOMS)
+        floor_current=1;
+    }
     room_load();
+}
+
+void transition_room_next()
+{
+    room_end(false);
+    room_init();
 }
 
 void place_floor(u8 x, u8 y)

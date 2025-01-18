@@ -13,7 +13,7 @@ void enemy_take_damage(Actor * a)
         a->type=OBJ_EFFECT;
         a->act_move_finish=NULL;
         a->act_move_start=NULL;
-        a->act_realtime=effect_run;
+        a->act_realtime=effect_update;
     }
 }
 

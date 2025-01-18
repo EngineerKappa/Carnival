@@ -28,6 +28,7 @@ void player_reset()
     player->vflip = false;
     player->scroll_x = 0;
     player->scroll_y = 0;
+    SPR_setVFlip(player->sprite,false);
     SPR_setPriority(player->sprite,false);
     SPR_setDepth(player->sprite,SPR_MIN_DEPTH);
     actor_face_dir(player);

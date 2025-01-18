@@ -30,7 +30,7 @@ extern room floor_20;
 void room_list_init();
 void room_init();
 void room_load();
-void room_end();
+void room_end(bool restart);
 void place_tile(u8 x, u8 y,u8 start_tile);
 void place_floor(u8 x, u8 y);
 

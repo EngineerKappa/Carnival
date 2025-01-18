@@ -3,8 +3,9 @@
 
 void game_init()
 {
+    SPR_init();
     room_list_init();
-    BG_load_frame();
+    
     actors_clear_all(true);
     actors_init();
     VDP_loadTileSet(&castle_tileset,BG_VRAM_ind,DMA);
@@ -25,7 +26,7 @@ void game_init()
     XGM2_play(bgm_fjf);
 }
 
-void game_run_move()
+void game_update_move()
 {
     game_pixels_scrolled+=2;
     game_move_actors();
@@ -46,52 +47,9 @@ void game_run_move()
     }
 }
 
-void game_run_death()
-{
-    if (gm_timer==0)
-    {
-        XGM2_playPCM(snd_wilhelm,sizeof(snd_wilhelm),SOUND_PCM_CH2);
-    }
 
-    if (player_hp==0 && gm_timer < 30 && (gm_timer % 2 == 0))
-    {
-        player->facing_dir++;
-        actor_face_dir(player);
-    }
 
-    if (gm_timer==30)
-    {
-        SPR_setAnim(player->sprite,2);
-        SPR_setVFlip(player->sprite,true);
-    }
-
-    if (gm_timer==60)
-    {
-        SPR_setAnim(player->sprite,2);
-        SPR_setVFlip(player->sprite,true);
-        PAL_fadeOutPalette(PAL2,30,true);       
-        //transition_start(game_init);
-    }
-
-    if (gm_timer==90)
-    {
-        actors_clear_all(false);
-        gm_state=GAME_STATE_GAMEOVER;
-        VDP_drawImageEx(BG_A,&bg_gameover,TILE_ATTR_FULL(PAL0, true, false, false, VRAM_ind),3,2,false,true);
-        
-        if (random() % 5 > 1)
-        {
-            XGM2_play(bgm_gameover1);
-        }
-        else
-        {
-            XGM2_play(bgm_gameover2);
-        }
-    }
-    gm_timer++;
-}
-
-void game_run_attack()
+void game_update_attack()
 {
     if (gm_timer<15)
     {
@@ -267,6 +225,8 @@ void game_run_attack()
 
 void game_end()
 {
+    VDP_clearPlane(BG_B,true);
+    VDP_clearSprites();
     SPR_end();
 }
 
@@ -280,28 +240,28 @@ void game_update()
         break;
 
         case GAME_STATE_MOVE:
-        game_run_move();
+        game_update_move();
         break;
 
         case GAME_STATE_ATTACK:
-        game_run_attack();
+        game_update_attack();
         break;
 
         case GAME_STATE_DEATH:
-        game_run_death();
+        game_update_death();
         break;
 
         case GAME_STATE_GATE:
-        game_run_gate();
+        game_update_gate();
         break;
     }
     if (gm_state!=GAME_STATE_GAMEOVER)
     {
-        game_run_actors_realtime();
+        game_update_actors_realtime();
     }
 }
 
-void game_run_gate()
+void game_update_gate()
 {
     int16_t play_y;
     if (gm_timer==0)

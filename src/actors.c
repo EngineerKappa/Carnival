@@ -225,7 +225,7 @@ void game_move_end()
     }
 }
 
-void game_run_actors_realtime()
+void game_update_actors_realtime()
 {
     u8 i;
     for(i = 0; i < MAX_ACTORS; i++)
@@ -296,13 +296,13 @@ void yorb_collect(Actor * a)
     a->type=OBJ_EFFECT;
     yorb_count++;
     SPR_setAnim(a->sprite,1);
-    a->act_realtime=effect_run;
+    a->act_realtime=effect_update;
     XGM2_playPCM(snd_yorb,sizeof(snd_yorb),SOUND_PCM_CH2);
     update_hud=true;
     
 }
 
-void effect_run(Actor * a)
+void effect_update(Actor * a)
 {
     a->timer++;
     a->frame++;

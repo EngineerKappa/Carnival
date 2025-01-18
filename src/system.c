@@ -2,16 +2,16 @@
 
 void system_init()
 {
-    JOY_init();
+    
 	input_init();
 	SPR_init();
 	BG_init();
 	Z80_loadDriver(Z80_DRIVER_XGM2,true);
-	XGM2_setLoopNumber(0);
+	XGM2_setLoopNumber(-1);
 	transition_init();
-	JOY_setEventHandler(&input_update);
     PAL_setPalette(PAL0, frame.palette->data, DMA);
 	VDP_loadFont(custom_font.tileset, DMA);
+	BG_load_frame();
     gm_current=GM_TITLE;
 	
 	gm_start(gm_current);
@@ -22,6 +22,10 @@ void system_update()
 	if (func_update!=NULL && transition_state==0)
 	func_update();
 
+	if (menu_state==MENU_STATE_ACTIVE)
+	{
+		menu_update();
+	}
 	
 }
 
@@ -31,6 +35,9 @@ void gm_end()
 	{
 		case GM_TITLE:
 			title_end();
+			break;
+		case GM_GAME:
+			game_end();
 			break;
 	}
 }

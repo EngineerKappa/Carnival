@@ -48,20 +48,23 @@ void game_check_turn()
 
 void input_init()
 {
+	JOY_init();
 	joypad_data=0;
+	joypad_data_changed=0;
 }
 
-void input_update(u16 joy, u16 changed, u16 state)
+void input_update()
 {
-	joypad_data = state;
+	joypad_data_changed=joypad_data;
+	joypad_data = JOY_readJoypad(JOY_1);
 }
 
 bool input_player_check()
 {
 	u8 dir = NULL;
-	if (joypad_data & BUTTON_RIGHT)
+	if joy_held(BUTTON_RIGHT)
 		dir = DIR_RIGHT;
-	if (joypad_data & BUTTON_UP)
+	if joy_held(BUTTON_UP)
 		dir = DIR_UP;
 	if (joypad_data & BUTTON_LEFT)
 		dir = DIR_LEFT;
@@ -82,3 +85,12 @@ bool input_player_check()
 	return true;
 }
 
+bool inputButtonPressed(u8 button)
+{
+	return ((joypad_data & button) && (joypad_data_changed & button));
+}
+
+bool inputConfirmPressed()
+{
+	return (inputButtonPressed(BUTTON_A) || inputButtonPressed(BUTTON_C));
+}
