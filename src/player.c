@@ -12,8 +12,6 @@ void player_init(){
     player = pl;
     pl->sprite = SPR_addSprite(&spr_swordsman,WINDOW_X+pl->x * 16 ,WINDOW_Y+pl->y * 16,TILE_ATTR(PAL1,0,FALSE,pl->hflip));
     player_reset();
-    
-
 }
 
 void player_reset()
@@ -62,6 +60,10 @@ void player_collect_item()
                 XGM2_playPCM(snd_teleport,sizeof(snd_teleport),SOUND_PCM_CH2);
                 gm_timer=0;
                 gm_state=GAME_STATE_GATE;
+
+                if (floor_current==MAX_ROOMS)
+                XGM2_stop();
+
                 break;
             }
             

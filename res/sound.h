@@ -13,5 +13,6 @@ extern const u8 bgm_cutscene[38400];
 extern const u8 bgm_fjf[48640];
 extern const u8 bgm_gameover1[18944];
 extern const u8 bgm_gameover2[1280];
+extern const u8 bgm_engineerkappa[1024];
 
 #endif // _RES_SOUND_H_

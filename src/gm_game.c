@@ -3,7 +3,7 @@
 
 void game_init()
 {
-    SPR_init();
+    
     room_list_init();
     
     actors_clear_all(true);
@@ -14,7 +14,7 @@ void game_init()
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     PAL_setPalette(PAL3, palette_red, DMA);
     
-    floor_current=2;
+    floor_current=4;
     yorb_count=0;
     step_count=0;
     func_update=game_update;
@@ -225,9 +225,9 @@ void game_update_attack()
 
 void game_end()
 {
+    actors_clear_all(true);
     VDP_clearPlane(BG_B,true);
     VDP_clearSprites();
-    SPR_end();
 }
 
 void game_update()

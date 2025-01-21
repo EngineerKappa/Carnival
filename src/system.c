@@ -12,7 +12,7 @@ void system_init()
     PAL_setPalette(PAL0, frame.palette->data, DMA);
 	VDP_loadFont(custom_font.tileset, DMA);
 	BG_load_frame();
-    gm_current=GM_TITLE;
+    gm_current=GM_GAME;
 	
 	gm_start(gm_current);
 }
@@ -33,6 +33,9 @@ void gm_end()
 {
 	switch (gm_current) 
 	{
+		case GM_LOGO:
+			logo_end();
+			break;
 		case GM_TITLE:
 			title_end();
 			break;
@@ -55,6 +58,10 @@ void gm_start(u8 gm)
 	gm_timer=0;
     switch (gm) 
 	{
+		case GM_LOGO:
+			logo_init();
+			break;
+
 		case GM_TITLE:
 			title_init();
 			break;

@@ -6,7 +6,6 @@ int main()
 	
 	while(1)
 	{     
-		
 		system_update();   
 		SPR_update();
 		SYS_doVBlankProcess();
