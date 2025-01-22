@@ -22,6 +22,7 @@ typedef void (*FunctionPointer)(struct Actor*);
 #define DIR_UP 2
 #define DIR_LEFT 3
 #define DIR_DOWN 4
+#define DIR_NULL 255
 
 
 

@@ -18,7 +18,7 @@ bool inputConfirmPressed();
 bool inputBack();
 bool inputBackPressed();
 void input_init();
-bool input_player_check();
+u8 input_player_check();
 void game_check_turn();
 
 

@@ -6,22 +6,24 @@ void game_check_turn()
 	//Exit if the turn ends and we're already in a new state
 	if (gm_state!=GAME_STATE_NORMAL)
 	return;
-	
-	if (input_player_check())
+	u8 dir=input_player_check();
+	if (dir!=DIR_NULL)
 	{
-
 		u8 i;
-		for(i = 0; i < MAX_ACTORS; i++)
+		if (dir!=DIR_NONE)
 		{
-			Actor* a = &actors[i];
-			
-			if (a->type == OBJ_BONEYM && a->x == player->x+dir_get_x(player->facing_dir) && a->y == player->y+dir_get_y(player->facing_dir))
+			for(i = 0; i < MAX_ACTORS; i++)
 			{
-				gm_state=GAME_STATE_ATTACK;
-				gm_timer=0;
-				actor_attacking=player;
-				actor_defending=a;
-				return;
+				Actor* a = &actors[i];
+				
+				if (a->type == OBJ_BONEYM && a->x == player->x+dir_get_x(player->facing_dir) && a->y == player->y+dir_get_y(player->facing_dir))
+				{
+					gm_state=GAME_STATE_ATTACK;
+					gm_timer=0;
+					actor_attacking=player;
+					actor_defending=a;
+					return;
+				}
 			}
 		}
 		
@@ -59,21 +61,22 @@ void input_update()
 	joypad_data = JOY_readJoypad(JOY_1);
 }
 
-bool input_player_check()
+u8 input_player_check()
 {
-	u8 dir = NULL;
-	if joy_held(BUTTON_RIGHT)
+	u8 dir = DIR_NULL;
+	if (joy_held(BUTTON_RIGHT))
 		dir = DIR_RIGHT;
-	if joy_held(BUTTON_UP)
+	if (joy_held(BUTTON_UP))
 		dir = DIR_UP;
-	if (joypad_data & BUTTON_LEFT)
+	if (joy_held(BUTTON_LEFT))
 		dir = DIR_LEFT;
-	if (joypad_data & BUTTON_DOWN)
+	if (joy_held(BUTTON_DOWN))
 		dir = DIR_DOWN;
-
-	if (dir == NULL)
+	if (joy_pressed(BUTTON_BTN))
+		return DIR_NONE;
+	if (dir == DIR_NULL)
 	{
-		return false;
+		return DIR_NULL;
 	}	
 	player->facing_dir=dir;
 
