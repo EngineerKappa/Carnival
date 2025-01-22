@@ -54,6 +54,8 @@ void transition_animate_enter()
             y=28-transition_scroll;
             tile=7;
         }
+        if (game_clear)
+        tile=7;
 
             VDP_setTileMapXY(BG_A, TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, tile),i,y);
             VDP_setTileMapXY(BG_A, TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, tile),i,y+1);

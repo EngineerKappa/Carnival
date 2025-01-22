@@ -56,6 +56,7 @@ void game_update_death()
 void menu_gameover_continue()
 {
     XGM2_stop();
+    score=0;
     transition_start(transition_gameover_continue);
 }
 

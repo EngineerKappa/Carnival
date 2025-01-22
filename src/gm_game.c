@@ -14,12 +14,14 @@ void game_init()
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     PAL_setPalette(PAL3, palette_red, DMA);
     
-    floor_current=4;
+    floor_current=1;
     yorb_count=0;
     step_count=0;
     func_update=game_update;
     update_hud=true;
+    score=0;
     player_hp=PLAYER_HP_MAX;
+    game_clear=false;
     room_load();
     room_init();
     SYS_setVBlankCallback(game_draw_hud_text);
@@ -225,6 +227,7 @@ void game_update_attack()
 
 void game_end()
 {
+    VDP_setHilightShadow(false);
     actors_clear_all(true);
     VDP_clearPlane(BG_B,true);
     VDP_clearSprites();
@@ -288,8 +291,13 @@ void game_update_gate()
     play_y=-16;
 
     SPR_setPosition(player->sprite,WINDOW_X+player->x * 16 + player->scroll_x, play_y);
-    if (gm_timer==60)
+    if (gm_timer==60 && !game_clear)
     {
-       transition_start(transition_room_next);
+        transition_start(transition_room_next);
+    }
+
+    if (gm_timer==120 && game_clear)
+    {
+        transition_start(transition_game_clear);
     }
 }

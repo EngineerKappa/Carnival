@@ -13,6 +13,8 @@ SPRITE  spr_kappa    "gfx/kappa.png" 4 4 FAST 5 NONE
 SPRITE  spr_eris    "gfx/eris.png" 5 4 FAST 5 NONE
 SPRITE  spr_boxer    "gfx/boxer.png" 3 2 FAST 5 NONE
 
+SPRITE  spr_uitext    "gfx/uitext.png" 4 4 BEST 10
+
 TILESET ui_tileset "map/uiframe.png" BEST
 TILESET ui_icon_tiles "gfx/textboxframe.png" BEST
 

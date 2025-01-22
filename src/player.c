@@ -61,8 +61,12 @@ void player_collect_item()
                 gm_timer=0;
                 gm_state=GAME_STATE_GATE;
 
-                if (floor_current==MAX_ROOMS)
-                XGM2_stop();
+
+                if (floor_current>=MAX_ROOMS)
+                {
+                    game_clear=true;
+                    XGM2_stop();
+                }
 
                 break;
             }

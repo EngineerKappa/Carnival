@@ -12,10 +12,13 @@ u8 game_pixels_scrolled;
 
 u8 floor_current;
 u16 yorb_count;
+u16 score;
 u16 step_count;
 bool update_hud;
+bool game_clear;
 #define PLAYER_HP_MAX 10
 u8 player_hp;
+
 
 void game_init();
 void game_end();

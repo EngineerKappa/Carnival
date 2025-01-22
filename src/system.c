@@ -12,7 +12,7 @@ void system_init()
     PAL_setPalette(PAL0, frame.palette->data, DMA);
 	VDP_loadFont(custom_font.tileset, DMA);
 	BG_load_frame();
-    gm_current=GM_GAME;
+    gm_current=GM_LOGO;
 	
 	gm_start(gm_current);
 }
@@ -42,6 +42,9 @@ void gm_end()
 		case GM_GAME:
 			game_end();
 			break;
+		case GM_ENDING:
+			ending_end();
+			break;
 	}
 }
 
@@ -68,6 +71,10 @@ void gm_start(u8 gm)
 		
 		case GM_GAME:
 			game_init();
+			break;
+		
+		case GM_ENDING:
+			ending_init();
 			break;
 	}
 }

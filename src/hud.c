@@ -39,7 +39,7 @@ void game_draw_hud_text()
     VDP_drawTextBG(BG_B,str,30,13);
 
     //Score
-    intToStr(0,str,3);
-    VDP_drawTextBG(BG_B,str,31,25);
+    intToStr(score,str,5);
+    VDP_drawTextBG(BG_B,str,30,25);
     update_hud=false;
 }

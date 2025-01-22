@@ -12,6 +12,7 @@ extern const Image bg_engineerkappa;
 extern const SpriteDefinition spr_kappa;
 extern const SpriteDefinition spr_eris;
 extern const SpriteDefinition spr_boxer;
+extern const SpriteDefinition spr_uitext;
 extern const TileSet ui_tileset;
 extern const TileSet ui_icon_tiles;
 extern const Palette castle_palette;
