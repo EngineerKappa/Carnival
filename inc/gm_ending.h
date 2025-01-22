@@ -8,3 +8,4 @@ void ending_update();
 void ending_end();
 
 void transition_game_clear();
+void transition_ending_logo();

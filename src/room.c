@@ -39,6 +39,10 @@ void room_init()
                 place_floor(x,y);
                 spawn_gate(x,y);
                 break;
+            case RS_HEART:
+                place_floor(x,y);
+                spawn_heart(x,y);
+                break;
             case RS_BONEYM_DOWN:
                 place_floor(x,y);
                 spawn_boneym(x,y,DIR_DOWN);

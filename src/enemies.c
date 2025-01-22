@@ -5,7 +5,8 @@ void enemy_take_damage(Actor * a)
     if (a->hp<=0)
     {
         XGM2_playPCM(snd_zip,sizeof(snd_zip),SOUND_PCM_CH3);
-        
+        score+=500;
+        update_hud=true;
         actor_defending_will_counter=false;
         actor_clear_blockmap(a);
         a->state=0;

@@ -122,8 +122,14 @@ void ending_update()
         {
             if (joy_pressed(BUTTON_START))
             {
+                XGM2_fadeOutAndStop(50);
                 game_clear=false;
-                transition_start(transition_gameover_end_game);
+                PAL_fadeOutAll(60,false);
+                actors_clear_all(true);
+                SPR_update();
+                waitMs(1000);
+                gm_change(GM_LOGO);
+                return;
             }
         }
         gm_timer++;
@@ -146,14 +152,22 @@ void ending_update()
 
 void ending_end()
 {
+    
     background_y=0;
-    actors_clear_all(true);
-    SPR_defragVRAM();
     VDP_clearPlane(BG_B,true);
+    VDP_clearPlane(BG_A,true);
+    
+    SPR_defragVRAM();
     XGM2_stop();
+    
 }
 
 void transition_game_clear()
 {
     gm_change(GM_ENDING);
+}
+
+void transition_ending_logo()
+{
+    gm_change(GM_LOGO);
 }

@@ -35,8 +35,8 @@ void game_draw_hud_text()
     //VDP_drawTextBG(BG_B,"*****",30,9);
 
     //Yorbs
-    intToStr(yorb_count,str,3);
-    VDP_drawTextBG(BG_B,str,30,13);
+    intToStr(yorb_count,str,2);
+    VDP_drawTextBG(BG_B,str,32,13);
 
     //Score
     intToStr(score,str,5);

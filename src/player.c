@@ -56,9 +56,14 @@ void player_collect_item()
             case OBJ_YORB:
                 yorb_collect(a);
                 break;
+            case OBJ_HEART:
+                heart_collect(a);
+                break;
             case OBJ_GATE:
                 XGM2_playPCM(snd_teleport,sizeof(snd_teleport),SOUND_PCM_CH2);
                 gm_timer=0;
+                score+=1000;
+                update_hud=true;
                 gm_state=GAME_STATE_GATE;
 
 

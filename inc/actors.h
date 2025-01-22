@@ -5,6 +5,7 @@ enum {
     OBJ_YORB,
     OBJ_GATE,
     OBJ_BONEYM,
+    OBJ_HEART,
 
     OBJ_EFFECT,
 };
@@ -59,10 +60,13 @@ u8 actors_spawned;
 Actor actors[MAX_ACTORS];
 
 // animation index table for enemies (static VRAM loading)
-u16** sprite_index_yorb;
-u16** sprite_index_gate;
-u16** sprite_index_boneym;
-u16** sprite_index_pointy;
+typedef u16** SpriteIndex;
+
+SpriteIndex sprite_index_yorb;
+SpriteIndex sprite_index_gate;
+SpriteIndex sprite_index_boneym;
+SpriteIndex sprite_index_pointy;
+SpriteIndex sprite_index_heart;
 
 
 
@@ -76,6 +80,7 @@ void actors_clear_all(bool delete_player);
 
 void spawn_yorb(int spawn_x,int spawn_y);
 void spawn_gate(int spawn_x,int spawn_y);
+void spawn_heart(int spawn_x,int spawn_y);
 
 
 void yorb_animate(Sprite* sprite);
@@ -87,6 +92,7 @@ void boneym_attack(Actor * a);
 void pointy_animate(Sprite* sprite);
 
 void yorb_collect(Actor * a);
+void heart_collect(Actor * a);
 
 void effect_update(Actor * a);
 

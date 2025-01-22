@@ -8,6 +8,8 @@ void actor_sprite_init()
     SPR_VRAM_ind+=numTile;
     sprite_index_gate=SPR_loadAllFrames(&spr_gate,SPR_VRAM_ind,&numTile);
     SPR_VRAM_ind+=numTile;
+    sprite_index_heart=SPR_loadAllFrames(&spr_heart,SPR_VRAM_ind,&numTile);
+    SPR_VRAM_ind+=numTile;
     sprite_index_boneym=SPR_loadAllFrames(&spr_boneym,SPR_VRAM_ind,&numTile);
     SPR_VRAM_ind+=numTile;
     sprite_index_pointy=SPR_loadAllFrames(&spr_pointy,SPR_VRAM_ind,&numTile);
@@ -291,10 +293,37 @@ void yorb_animate(Sprite* sprite)
     SPR_setVRAMTileIndex(sprite,tileIndex);
 }
 
+void set_sprite_index(Sprite* sprite,SpriteIndex sprite_index)
+{
+    u16 tileIndex = sprite_index[sprite->animInd][sprite->frameInd];
+    SPR_setVRAMTileIndex(sprite,tileIndex);
+}
+
+void heart_collect(Actor * a)
+{
+    a->type=OBJ_EFFECT;
+    
+    //SPR_setAnim(a->sprite,1);
+    actor_free(a);
+    if (player_hp<PLAYER_HP_MAX)
+    player_hp++;
+    XGM2_playPCM(snd_heart,sizeof(snd_heart),SOUND_PCM_CH3);
+    update_hud=true;
+    
+}
+
 void yorb_collect(Actor * a)
 {
     a->type=OBJ_EFFECT;
     yorb_count++;
+    if (yorb_count>=50)
+    {
+        if (player_hp<PLAYER_HP_MAX)
+        player_hp++;
+        XGM2_playPCM(snd_heart,sizeof(snd_heart),SOUND_PCM_CH3);
+        yorb_count=0;
+    }
+
     SPR_setAnim(a->sprite,1);
     a->act_realtime=effect_update;
     XGM2_playPCM(snd_yorb,sizeof(snd_yorb),SOUND_PCM_CH2);
@@ -324,6 +353,22 @@ void effect_update(Actor * a)
     }
 }
 
+void spawn_heart(int spawn_x,int spawn_y)
+{
+    Actor *a = &actors[actor_find_empty_slot()];
+    actor_set_defaults(a);
+    
+    gate = a;
+    a->type = OBJ_HEART;
+    a->x = spawn_x;
+    a->y = spawn_y;
+    
+    a->sprite = SPR_addSprite(&spr_heart,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16,TILE_ATTR(PAL0,0,FALSE,a->hflip));
+    SPR_setAutoTileUpload(a->sprite, FALSE);
+    set_sprite_index(a->sprite,sprite_index_heart);
+    actors_spawned++;
+}
+
 void spawn_gate(int spawn_x,int spawn_y)
 {
     Actor *a = &actors[actor_find_empty_slot()];
@@ -337,7 +382,6 @@ void spawn_gate(int spawn_x,int spawn_y)
     a->sprite = SPR_addSprite(&spr_gate,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16,TILE_ATTR(PAL1,0,FALSE,a->hflip));
     SPR_setAutoTileUpload(a->sprite, FALSE);
     SPR_setFrameChangeCallback(a->sprite, &gate_animate);
-    yorb_animate(a->sprite);
     actors_spawned++;
 }
 

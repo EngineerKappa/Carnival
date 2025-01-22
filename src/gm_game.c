@@ -26,6 +26,7 @@ void game_init()
     room_init();
     SYS_setVBlankCallback(game_draw_hud_text);
     XGM2_play(bgm_fjf);
+    MAX_ROOMS=1;
 }
 
 void game_update_move()

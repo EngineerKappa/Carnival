@@ -21,7 +21,6 @@ u8 palcycle_index;
 void logo_init()
 {
     palcycle_index=3;
-
     //PAL_setColors(PAL2*16,palette_black,16,DMA);
     func_update=logo_update;
     PAL_setPalette(PAL1, palette_engineerkappa_2.data, DMA);
@@ -31,7 +30,7 @@ void logo_init()
     eris_x=-64;
     gm_state=LOGO_STATE_SCROLL;
     VDP_setVerticalScroll(BG_B,-background_y);
-
+    
     sprite_kappa=SPR_addSprite(&spr_kappa,kappa_x,150,TILE_ATTR(PAL2,0,FALSE,FALSE));
     sprite_eris=SPR_addSprite(&spr_eris,eris_x,150,TILE_ATTR(PAL3,0,FALSE,FALSE));
     sprite_boxer=SPR_addSprite(&spr_boxer,eris_x,150-24,TILE_ATTR(PAL3,0,FALSE,FALSE));
