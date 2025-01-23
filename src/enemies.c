@@ -68,6 +68,12 @@ void pointy_update(Actor * a)
         a->target_x=target_x;
         a->target_y=target_y;
     }
+
+    if (a->target_x==player->x && a->target_y==player->y && a->x==player->target_x && a->y==player->target_y) //Intercept player movement
+    {
+        player->target_x=player->x;
+        player->target_y=player->y;
+    }
     actor_set_blockmap(a,BM_LAYER_HAZARD);
 }
 
