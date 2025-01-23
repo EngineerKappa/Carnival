@@ -76,20 +76,11 @@ void game_update_attack()
     {
         actor_defending_shake=6;
         actor_defending_will_counter=false;
-        actor_attacking->scroll_x=dir_get_x(actor_attacking->facing_dir)*3;
-        actor_attacking->scroll_y=dir_get_y(actor_attacking->facing_dir)*3;
-
-        //int8_t newx=actor_defending->x+dir_get_x(actor_attacking->facing_dir);
-        //int8_t newy=actor_defending->y+dir_get_y(actor_attacking->facing_dir);
-        //if (!tile_check_wall(newx,newy,true))
-        //{
-        //    actor_clear_blockmap(actor_defending);
-        //    actor_defending->x=newx;
-        //    actor_defending->y=newy;
-        //    actor_defending->target_x=newx;
-        //    actor_defending->target_y=newy;
-        //    actor_set_blockmap(actor_defending);
-        //}
+        if (actor_attacking!=NULL)
+        {
+            actor_attacking->scroll_x=dir_get_x(actor_attacking->facing_dir)*3;
+            actor_attacking->scroll_y=dir_get_y(actor_attacking->facing_dir)*3;
+        }
         
         
         if (actor_defending==player)
@@ -107,8 +98,11 @@ void game_update_attack()
         }
         else
         {
-            actor_attacking->frame = 0;
-            actor_face_dir(actor_attacking);
+            if (actor_attacking!=NULL)
+            {
+                actor_attacking->frame = 0;
+                actor_face_dir(actor_attacking);
+            }
             XGM2_playPCM(snd_hit,sizeof(snd_hit),SOUND_PCM_CH2);
             actor_defending_palette=PAL0;
             u8 damage=2;
@@ -130,7 +124,10 @@ void game_update_attack()
             {
                 actor_defending->hp-=damage;
             }
-            actor_defending->facing_dir=dir_get_180(actor_attacking->facing_dir);
+            if (actor_attacking!=NULL)
+            {
+                actor_defending->facing_dir=dir_get_180(actor_attacking->facing_dir);
+            }
             actor_face_dir(actor_defending);
             enemy_take_damage(actor_defending);
         }
@@ -138,19 +135,19 @@ void game_update_attack()
         
     }
 
-    if (gm_timer == 5)
+    if (gm_timer == 5 && actor_attacking!=NULL)
     {
         actor_attacking->frame = 1;
         actor_face_dir(actor_attacking);
     }
 
-    if (gm_timer == 15)
+    if (gm_timer == 15 && actor_attacking!=NULL)
     {
         actor_attacking->frame = 0;
         actor_face_dir(actor_attacking);
     }
 
-    if (gm_timer>15)
+    if (gm_timer>15 && actor_attacking!=NULL)
     {
         if (actor_attacking->scroll_x>0)
         actor_attacking->scroll_x--;

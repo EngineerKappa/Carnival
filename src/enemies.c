@@ -27,8 +27,11 @@ void spawn_pointy(int spawn_x, int spawn_y,u8 facing_dir)
     a->y = spawn_y;
     a->target_x=spawn_x;
     a->target_y=spawn_y;
+    a->collision_layer=BM_LAYER_HAZARD;
+    a->collision_mask=BM_MASK_POINTY;
     a->facing_dir=facing_dir;
     a->act_move_start=pointy_update;
+    a->act_move_finish=pointy_attack;
     a->sprite = SPR_addSprite(&spr_pointy,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
     SPR_setAutoTileUpload(a->sprite, FALSE);
     SPR_setFrameChangeCallback(a->sprite, &pointy_animate);
@@ -37,13 +40,24 @@ void spawn_pointy(int spawn_x, int spawn_y,u8 facing_dir)
     actors_spawned++;
 }
 
+void pointy_attack(Actor * a)
+{
+    if (!(a->x==player->x && a->y==player->y))
+    return;
+    attacker_count=1;
+    actor_attacking=NULL;
+    actor_defending=player;
+    gm_timer=0;
+    gm_state=GAME_STATE_ATTACK;
+}
+
 void pointy_update(Actor * a)
 {
     int8_t target_x,target_y;
     target_x=a->x+dir_get_x(a->facing_dir);
     target_y=a->y+dir_get_y(a->facing_dir);
 
-    if (tile_check_wall(target_x,target_y,true))
+    if (blockmap_check(target_x,target_y) & BM_MASK_POINTY)
     {
         a->facing_dir=dir_get_180(a->facing_dir);
         a->target_x=a->x+dir_get_x(a->facing_dir);
@@ -54,6 +68,7 @@ void pointy_update(Actor * a)
         a->target_x=target_x;
         a->target_y=target_y;
     }
+    actor_set_blockmap(a,BM_LAYER_HAZARD);
 }
 
 void pointy_animate(Sprite* sprite)
@@ -74,6 +89,8 @@ void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir)
     a->target_x=spawn_x;
     a->target_y=spawn_y;
     a->facing_dir=facing_dir;
+    a->collision_layer=BM_LAYER_ENEMY;
+    a->collision_mask=BM_MASK_BONEYM;
     a->act_move_start=boneym_turn_start;
     a->act_move_finish=boneym_attack;
     a->act_counterattack=boneym_attack;
@@ -139,12 +156,12 @@ void boneym_target_player(Actor * a)
                     a->facing_dir=dir_check;
                     actor_face_dir(a);
                 }
-                actor_set_blockmap(a);
+                actor_set_blockmap(a,BM_LAYER_ENEMY);
                 return;
             }
         }
 
-        if (!tile_check_wall(target_x,target_y,true))
+        if (!(blockmap_check(target_x,target_y) & BM_MASK_BONEYM))
         {
             dir_dist[dir_check]=((target_x-px)*(target_x-px))+((target_y-py)*(target_y-py));
             if (dir_dist[dir_check]<=min_dist)
@@ -188,7 +205,7 @@ void boneym_target_player(Actor * a)
         
     }
     actor_face_dir(a);
-    actor_set_blockmap(a);
+    actor_set_blockmap(a,BM_LAYER_ENEMY);
 }
 
 void boneym_attack(Actor * a)

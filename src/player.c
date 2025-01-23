@@ -26,6 +26,8 @@ void player_reset()
     player->vflip = false;
     player->scroll_x = 0;
     player->scroll_y = 0;
+    player->collision_layer = BM_LAYER_PLAYER;
+    player->collision_mask = BM_MASK_PLAYER;
     SPR_setVFlip(player->sprite,false);
     SPR_setPriority(player->sprite,false);
     SPR_setDepth(player->sprite,SPR_MIN_DEPTH);
@@ -52,7 +54,7 @@ void player_collect_item()
         if ( a->x == px && a->y == py)
         {
             switch (a->type)
-            {
+            {            
             case OBJ_YORB:
                 yorb_collect(a);
                 break;

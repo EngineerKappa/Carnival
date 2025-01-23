@@ -2,7 +2,7 @@
 #define ROOM_MAX_TILES 169
 typedef u8 room[ROOM_MAX_TILES];
 room room_data;
-bool blockmap[ROOM_MAX_TILES];
+u8 blockmap[ROOM_MAX_TILES];
 room* room_list[50];
 u8 MAX_ROOMS;
 
@@ -26,6 +26,15 @@ extern room floor_18;
 extern room floor_19;
 extern room floor_20;
 
+#define BM_LAYER_WALL        0b10000000
+#define BM_LAYER_PLAYER      0b01000000
+#define BM_LAYER_HAZARD      0b00100000
+#define BM_LAYER_ENEMY       0b00010000
+
+#define BM_MASK_ACTORS       0b01111111
+#define BM_MASK_BONEYM       0b11111111
+#define BM_MASK_POINTY       0b10000000
+#define BM_MASK_PLAYER       0b10011111
 
 void room_list_init();
 void room_init();
@@ -41,7 +50,7 @@ enum {
 
 extern const u8 tiledefs[16];
 
-bool tile_check_wall(u8 x, u8 y, bool check_actors);
+u8 blockmap_check(u8 x, u8 y);
 
 
 enum {

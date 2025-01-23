@@ -16,13 +16,26 @@ void game_check_turn()
 			{
 				Actor* a = &actors[i];
 				
-				if (a->type == OBJ_BONEYM && a->x == player->x+dir_get_x(player->facing_dir) && a->y == player->y+dir_get_y(player->facing_dir))
+				if (a->x == player->x+dir_get_x(player->facing_dir) && a->y == player->y+dir_get_y(player->facing_dir))
 				{
-					gm_state=GAME_STATE_ATTACK;
-					gm_timer=0;
-					actor_attacking=player;
-					actor_defending=a;
-					return;
+					switch (a->type)
+					{
+						case OBJ_BONEYM:
+							player->target_x=player->x;
+							player->target_y=player->y;
+							gm_state=GAME_STATE_ATTACK;
+							gm_timer=0;
+							actor_attacking=player;
+							actor_defending=a;
+							return;
+						case OBJ_POINTY: //Hack to make it so if the player walks face first into a pointy, they get what's coming to em
+							if (player->facing_dir==dir_get_180(a->facing_dir))
+							{
+								player->target_x=player->x;
+								player->target_y=player->y;
+							}
+							break;
+					}
 				}
 			}
 		}
@@ -79,12 +92,11 @@ u8 input_player_check()
 		return DIR_NULL;
 	}	
 	player->facing_dir=dir;
-
 	
 
 	actor_face_dir(player);
 	actor_target_forward(player);
-	actor_set_blockmap(player);
+	actor_set_blockmap(player,BM_LAYER_PLAYER);
 	return true;
 }
 

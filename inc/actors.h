@@ -40,6 +40,8 @@ typedef struct Actor {
     u8 state;
     u8 frame;
     u8 type;
+    u8 collision_layer;
+    u8 collision_mask;
     bool hflip, vflip;
 } Actor;
 
@@ -78,7 +80,8 @@ void actor_set_defaults(Actor *a);
 void actors_clear_all(bool delete_player);
 
 //Actor Collisions
-void actor_set_blockmap(Actor * a);
+void actor_set_blockmap(Actor * a, u8 collision_layer);
+void actor_remove_from_blockmap(Actor * a, u8 collision_layer);
 void actor_clear_blockmap(Actor * a);
 
 //Actor Logic
@@ -124,6 +127,7 @@ void boneym_animate(Sprite* sprite);
 void spawn_pointy(int spawn_x,int spawn_y,u8 facing_dir);
 void pointy_animate(Sprite* sprite);
 void pointy_update(Actor * a);
+void pointy_attack(Actor * a);
 
 
 

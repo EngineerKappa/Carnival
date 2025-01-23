@@ -31,6 +31,8 @@ void actor_set_defaults(Actor *a)
     a->target_y = 0;
     a->scroll_x = 0;
     a->scroll_y = 0;
+    a->collision_layer = 0;
+    a->collision_mask = 0;
     a->state = 0;
     a->frame = 0;
     a->timer = 0;
@@ -119,7 +121,7 @@ bool actor_target_forward(Actor* a)
     target_x=a->x + dir_get_x(dir);
     target_y=a->y + dir_get_y(dir);
 
-    if (!tile_check_wall(target_x,target_y,true))
+    if (!(blockmap_check(target_x,target_y) & a->collision_mask))
     {
         a->target_x=target_x;
 	    a->target_y=target_y;
@@ -236,29 +238,33 @@ void game_update_actors_realtime()
     }
 }
 
-void actor_set_blockmap(Actor * a)
+void actor_set_blockmap(Actor * a, u8 collision_layer)
 {
-    blockmap[a->x + (a->y*13    )]=true;
-    blockmap[a->target_x + (a->target_y*13)]=true;
+    blockmap[a->x + (a->y*13)] |= collision_layer;
+    blockmap[a->target_x + (a->target_y*13)] |= collision_layer;
     //place_tile(a->x,a->y,2);
     //place_tile(a->target_x,a->target_y,2);
-
 }
+
+void actor_remove_from_blockmap(Actor * a, u8 collision_layer)
+{
+    blockmap[a->x + (a->y*13)]&=~collision_layer;
+}
+
 void actor_clear_blockmap(Actor * a)
 {
-    blockmap[a->x + (a->y*13)]=false;
+    blockmap[a->x + (a->y*13)]=0;
     //place_tile(a->x,a->y,0);
 }
 
 void actor_scroll_finish(Actor * a)
 {
-    actor_clear_blockmap(a);
+    actor_remove_from_blockmap(a,BM_MASK_ACTORS);
     a->x=a->target_x;
     a->y=a->target_y;
     a->scroll_x=0;
     a->scroll_y=0;
     SPR_setPosition(a->sprite,WINDOW_X+a->x * 16 + a->scroll_x, WINDOW_Y+a->y * 16 - 4 + a->scroll_y);
-    actor_set_blockmap(a);
     if ((a->type != OBJ_EMPTY)  && (a->act_move_finish!=NULL))
     {
         

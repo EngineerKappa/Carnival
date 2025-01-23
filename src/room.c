@@ -125,7 +125,7 @@ inline void place_floor(u8 x, u8 y)
     place_tile(x,y,tile);
 }
 
-bool tile_check_wall(u8 x, u8 y, bool check_actors)
+u8 blockmap_check(u8 x, u8 y)
 {
     return blockmap[x + (y*13)];
 }
@@ -133,9 +133,9 @@ bool tile_check_wall(u8 x, u8 y, bool check_actors)
 void place_tile(u8 x,u8 y,u8 start_tile)
 {
     if (tiledefs[start_tile]==TD_SOLID)
-    blockmap[x + (y*13)]=true;
+    blockmap[x + (y*13)]=BM_LAYER_WALL;
     else
-    blockmap[x + (y*13)]=false;
+    blockmap[x + (y*13)]=0;
 
     start_tile*=4;
     VDP_setTileMapXY(BG_B, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind+start_tile),  1+x*2,1+y*2);
