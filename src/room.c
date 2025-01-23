@@ -43,6 +43,7 @@ void room_init()
                 place_floor(x,y);
                 spawn_heart(x,y);
                 break;
+
             case RS_BONEYM_DOWN:
                 place_floor(x,y);
                 spawn_boneym(x,y,DIR_DOWN);
@@ -57,14 +58,28 @@ void room_init()
                 break;
             case RS_BONEYM_UP:
                 place_floor(x,y);
-                spawn_boneym(x,y,DIR_LEFT);
+                spawn_boneym(x,y,DIR_UP);
+                break;
+            case RS_POINTY_UP:
+                place_floor(x,y);
+                spawn_pointy(x,y,DIR_UP);
+                break;
+            case RS_POINTY_RIGHT:
+                place_floor(x,y);
+                spawn_pointy(x,y,DIR_RIGHT);
+                break;
+            case RS_POINTY_LEFT:
+                place_floor(x,y);
+                spawn_pointy(x,y,DIR_LEFT);
+                break;
+            case RS_POINTY_DOWN:
+                place_floor(x,y);
+                spawn_pointy(x,y,DIR_DOWN);
                 break;
             default:
-                
                 place_tile(x,y,room_data[i]);
         }
-        
-
+    
         x++;
         if (x>ROOM_SIZE)
         {
@@ -101,7 +116,7 @@ void transition_room_next()
     room_init();
 }
 
-void place_floor(u8 x, u8 y)
+inline void place_floor(u8 x, u8 y)
 {
     u8 tile = 0;
     if (tiledefs[room_data[x+1 + (y*13)]]==TD_SOLID)

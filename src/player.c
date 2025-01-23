@@ -30,7 +30,7 @@ void player_reset()
     SPR_setPriority(player->sprite,false);
     SPR_setDepth(player->sprite,SPR_MIN_DEPTH);
     actor_face_dir(player);
-    actor_move_forward(player);
+    actor_target_forward(player);
 
 }
 

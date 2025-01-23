@@ -83,7 +83,7 @@ u8 input_player_check()
 	
 
 	actor_face_dir(player);
-	actor_move_forward(player);
+	actor_target_forward(player);
 	actor_set_blockmap(player);
 	return true;
 }

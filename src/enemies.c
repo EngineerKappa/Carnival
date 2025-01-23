@@ -18,6 +18,50 @@ void enemy_take_damage(Actor * a)
     }
 }
 
+void spawn_pointy(int spawn_x, int spawn_y,u8 facing_dir)
+{
+    Actor *a = &actors[actor_find_empty_slot()];
+    actor_set_defaults(a);
+    a->type = OBJ_POINTY;
+    a->x = spawn_x;
+    a->y = spawn_y;
+    a->target_x=spawn_x;
+    a->target_y=spawn_y;
+    a->facing_dir=facing_dir;
+    a->act_move_start=pointy_update;
+    a->sprite = SPR_addSprite(&spr_pointy,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
+    SPR_setAutoTileUpload(a->sprite, FALSE);
+    SPR_setFrameChangeCallback(a->sprite, &pointy_animate);
+    pointy_animate(a->sprite);
+    SPR_setDepth(a->sprite,SPR_MIN_DEPTH+1);
+    actors_spawned++;
+}
+
+void pointy_update(Actor * a)
+{
+    int8_t target_x,target_y;
+    target_x=a->x+dir_get_x(a->facing_dir);
+    target_y=a->y+dir_get_y(a->facing_dir);
+
+    if (tile_check_wall(target_x,target_y,true))
+    {
+        a->facing_dir=dir_get_180(a->facing_dir);
+        a->target_x=a->x+dir_get_x(a->facing_dir);
+        a->target_y=a->y+dir_get_y(a->facing_dir);
+    }
+    else
+    {
+        a->target_x=target_x;
+        a->target_y=target_y;
+    }
+}
+
+void pointy_animate(Sprite* sprite)
+{
+    u16 tileIndex = sprite_index_pointy[sprite->animInd][sprite->frameInd];
+    SPR_setVRAMTileIndex(sprite,tileIndex);
+}
+
 void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir)
 {
     Actor *a = &actors[actor_find_empty_slot()];
@@ -51,11 +95,11 @@ void boneym_turn_start(Actor * a)
     }
     else
     {
-        boneym_move(a);
+        boneym_target_player(a);
     }
 }
 
-void boneym_move(Actor * a)
+void boneym_target_player(Actor * a)
 {
     u16 min_dist=1000;
     int8_t target_x,target_y;
@@ -124,7 +168,7 @@ void boneym_move(Actor * a)
         }
         else
         {
-            if (!actor_move_forward(a))
+            if (!actor_target_forward(a))
             {
                 a->facing_dir++;
                 if (a->facing_dir==5)
@@ -134,7 +178,7 @@ void boneym_move(Actor * a)
     }
     else
     {
-        if (!actor_move_forward(a))
+        if (!actor_target_forward(a))
         {
             a->facing_dir++;
             if (a->facing_dir==5)
@@ -146,8 +190,6 @@ void boneym_move(Actor * a)
     actor_face_dir(a);
     actor_set_blockmap(a);
 }
-
-
 
 void boneym_attack(Actor * a)
 {

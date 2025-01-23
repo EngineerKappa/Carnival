@@ -112,7 +112,7 @@ void actor_face_dir(Actor* a)
 	}
 }
 
-bool actor_move_forward(Actor* a)
+bool actor_target_forward(Actor* a)
 {
     u8 dir=a->facing_dir;
     int8_t target_x,target_y;
@@ -181,7 +181,6 @@ u8 dir_get_180(u8 dir)
 	}
 }
 
-
 void actor_set_position(Actor* a, u8 target_x,u8 target_y)
 {
     a->x=target_x;
@@ -191,19 +190,18 @@ void actor_set_position(Actor* a, u8 target_x,u8 target_y)
     SPR_setPosition(a->sprite,WINDOW_X+a->x * 16,WINDOW_Y+a->y * 16 - 4);
 }
 
-void game_move_actors()
+void game_scroll_all_actors()
 {
     u8 i;
     for(i = 0; i < MAX_ACTORS; i++)
     {
         Actor* a = &actors[i];
         if ((a->type != OBJ_EMPTY)  && (a->act_move_start!=NULL))
-        actor_move(a);
+        actor_scroll(a);
     }
 }
 
-
-void actor_move(Actor* a)
+void actor_scroll(Actor* a)
 {
     if (a->x > a->target_x)
         a->scroll_x=-game_pixels_scrolled;
@@ -216,14 +214,14 @@ void actor_move(Actor* a)
     SPR_setPosition(a->sprite,WINDOW_X+a->x * 16 + a->scroll_x, WINDOW_Y+a->y * 16 - 4 + a->scroll_y);
 }
 
-void game_move_end()
+void game_scroll_end()
 {
     u8 i;
     for(i = 0; i < MAX_ACTORS; i++)
     {
         Actor* a = &actors[i];
         if ((a->type != OBJ_EMPTY)  && (a->act_move_start!=NULL))
-        actor_move_finish(a);
+        actor_scroll_finish(a);
     }
 }
 
@@ -252,7 +250,7 @@ void actor_clear_blockmap(Actor * a)
     //place_tile(a->x,a->y,0);
 }
 
-void actor_move_finish(Actor * a)
+void actor_scroll_finish(Actor * a)
 {
     actor_clear_blockmap(a);
     a->x=a->target_x;
@@ -268,128 +266,9 @@ void actor_move_finish(Actor * a)
     }
 }
 
-void spawn_yorb(int spawn_x,int spawn_y)
-{
-    Actor *a = &actors[actor_find_empty_slot()];
-    actor_set_defaults(a);
-    
-    a->type = OBJ_YORB;
-    a->x = spawn_x;
-    a->y = spawn_y;
-
-    a->sprite = SPR_addSprite(&spr_yorb,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
-    SPR_setAutoTileUpload(a->sprite, FALSE);
-    s16 frame = (((a->x + a->y)) % 4);
-    SPR_setFrame(a->sprite,frame);
-    SPR_setFrameChangeCallback(a->sprite, &yorb_animate);
-    SPR_setDepth(a->sprite,SPR_MAX_DEPTH);
-    yorb_animate(a->sprite);
-    actors_spawned++;
-}
-    
-void yorb_animate(Sprite* sprite)
-{
-    u16 tileIndex = sprite_index_yorb[sprite->animInd][sprite->frameInd];
-    SPR_setVRAMTileIndex(sprite,tileIndex);
-}
-
 void set_sprite_index(Sprite* sprite,SpriteIndex sprite_index)
 {
     u16 tileIndex = sprite_index[sprite->animInd][sprite->frameInd];
     SPR_setVRAMTileIndex(sprite,tileIndex);
 }
-
-void heart_collect(Actor * a)
-{
-    a->type=OBJ_EFFECT;
-    
-    //SPR_setAnim(a->sprite,1);
-    actor_free(a);
-    if (player_hp<PLAYER_HP_MAX)
-    player_hp++;
-    XGM2_playPCM(snd_heart,sizeof(snd_heart),SOUND_PCM_CH3);
-    update_hud=true;
-    
-}
-
-void yorb_collect(Actor * a)
-{
-    a->type=OBJ_EFFECT;
-    yorb_count++;
-    if (yorb_count>=50)
-    {
-        if (player_hp<PLAYER_HP_MAX)
-        player_hp++;
-        XGM2_playPCM(snd_heart,sizeof(snd_heart),SOUND_PCM_CH3);
-        yorb_count=0;
-    }
-
-    SPR_setAnim(a->sprite,1);
-    a->act_realtime=effect_update;
-    XGM2_playPCM(snd_yorb,sizeof(snd_yorb),SOUND_PCM_CH2);
-    score+=10;
-    update_hud=true;
-    
-}
-
-void effect_update(Actor * a)
-{
-    a->timer++;
-    a->frame++;
-    if (a->frame == 5)
-    {
-        a->hflip=!a->hflip;
-        SPR_setHFlip(a->sprite,a->hflip);
-    }
-    if (a->frame == 10)
-    {
-        a->vflip=!a->vflip;
-        SPR_setVFlip(a->sprite,a->vflip);
-        a->frame = 0;
-    }
-    if (a->timer == 20)
-    {
-        actor_free(a);
-    }
-}
-
-void spawn_heart(int spawn_x,int spawn_y)
-{
-    Actor *a = &actors[actor_find_empty_slot()];
-    actor_set_defaults(a);
-    
-    gate = a;
-    a->type = OBJ_HEART;
-    a->x = spawn_x;
-    a->y = spawn_y;
-    
-    a->sprite = SPR_addSprite(&spr_heart,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16,TILE_ATTR(PAL0,0,FALSE,a->hflip));
-    SPR_setAutoTileUpload(a->sprite, FALSE);
-    set_sprite_index(a->sprite,sprite_index_heart);
-    actors_spawned++;
-}
-
-void spawn_gate(int spawn_x,int spawn_y)
-{
-    Actor *a = &actors[actor_find_empty_slot()];
-    actor_set_defaults(a);
-    
-    gate = a;
-    a->type = OBJ_GATE;
-    a->x = spawn_x;
-    a->y = spawn_y;
-    
-    a->sprite = SPR_addSprite(&spr_gate,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16,TILE_ATTR(PAL1,0,FALSE,a->hflip));
-    SPR_setAutoTileUpload(a->sprite, FALSE);
-    SPR_setFrameChangeCallback(a->sprite, &gate_animate);
-    actors_spawned++;
-}
-
-void gate_animate(Sprite* sprite)
-{
-    u16 tileIndex = sprite_index_gate[sprite->animInd][sprite->frameInd];
-    SPR_setVRAMTileIndex(sprite,tileIndex);
-}
-
-
 

@@ -14,7 +14,7 @@ void game_init()
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     PAL_setPalette(PAL3, palette_red, DMA);
     
-    floor_current=1;
+    floor_current=2;
     yorb_count=0;
     step_count=0;
     func_update=game_update;
@@ -26,20 +26,19 @@ void game_init()
     room_init();
     SYS_setVBlankCallback(game_draw_hud_text);
     XGM2_play(bgm_fjf);
-    MAX_ROOMS=1;
 }
 
 void game_update_move()
 {
     game_pixels_scrolled+=2;
-    game_move_actors();
+    game_scroll_all_actors();
     if (game_pixels_scrolled>=16)
     {
         game_pixels_scrolled=0;
         if (attacker_count==0)
         {
             gm_state=GAME_STATE_NORMAL;
-            game_move_end();
+            game_scroll_end();
             game_check_turn();
         }
         else
