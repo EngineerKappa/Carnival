@@ -11,10 +11,6 @@ void room_init()
     gm_timer=0;
     
     BG_display_frame();
-    game_draw_hud_labels();
-    game_draw_hud_text();
-    
-    
     game_pixels_scrolled=0;
     update_hud=true;
     attacker_count=0;
@@ -22,6 +18,8 @@ void room_init()
     u8 x,y,i;
     x=0;
     y=0;
+
+    VDP_waitVBlank(true);
     for (i=0; i<ROOM_MAX_TILES; i++)
     {
         switch (room_data[i]) 
@@ -87,6 +85,8 @@ void room_init()
             y++;
         }
     }
+    game_draw_hud_labels();
+    game_draw_hud_text();
 }
 
 void room_load()
@@ -118,11 +118,7 @@ void transition_room_next()
 
 inline void place_floor(u8 x, u8 y)
 {
-    u8 tile = 0;
-    if (tiledefs[room_data[x+1 + (y*13)]]==TD_SOLID)
-    tile=1;
-
-    place_tile(x,y,tile);
+    place_tile(x,y,0+(tiledefs[room_data[x+1 + (y*13)]]==TD_SOLID));
 }
 
 u8 blockmap_check(u8 x, u8 y)
@@ -138,8 +134,5 @@ void place_tile(u8 x,u8 y,u8 start_tile)
     blockmap[x + (y*13)]=0;
 
     start_tile*=4;
-    VDP_setTileMapXY(BG_B, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind+start_tile),  1+x*2,1+y*2);
-    VDP_setTileMapXY(BG_B, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind+start_tile+1), 1+x*2+1,1+y*2);
-    VDP_setTileMapXY(BG_B, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind+start_tile+2), 1+x*2,1+y*2+1);
-    VDP_setTileMapXY(BG_B, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind+start_tile+3),1+x*2+1,1+y*2+1);
+    VDP_fillTileMapRectInc(BG_B,TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, BG_VRAM_ind+start_tile),  1+x*2,1+y*2,2,2);
 }
