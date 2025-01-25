@@ -23,6 +23,7 @@ extern const SpriteDefinition spr_gate;
 extern const SpriteDefinition spr_boneym;
 extern const SpriteDefinition spr_pointy;
 extern const SpriteDefinition spr_heart;
+extern const SpriteDefinition spr_trophy;
 extern const Image bg_gameover;
 extern const SpriteDefinition spr_uitext;
 

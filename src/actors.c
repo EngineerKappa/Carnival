@@ -13,6 +13,8 @@ void actor_sprite_init()
     sprite_index_boneym=SPR_loadAllFrames(&spr_boneym,SPR_VRAM_ind,&numTile);
     SPR_VRAM_ind+=numTile;
     sprite_index_pointy=SPR_loadAllFrames(&spr_pointy,SPR_VRAM_ind,&numTile);
+    SPR_VRAM_ind+=numTile;
+    sprite_index_trophy=SPR_loadAllFrames(&spr_trophy,SPR_VRAM_ind,&numTile);
 }
 
 void actors_init(){

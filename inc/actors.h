@@ -8,6 +8,10 @@ enum {
     OBJ_HEART,
     OBJ_EFFECT,
     OBJ_POINTY,
+    OBJ_TROPHY,
+    OBJ_WALKIETALKIE,
+    OBJ_FUSEDROPPER,
+    OBJ_BARREL
 };
 enum 
 { 
@@ -47,6 +51,7 @@ typedef struct Actor {
 
 Actor *player;
 Actor *gate;
+Actor *trophy;
 
 Actor *actor_defending;
 Actor *actor_attacking;
@@ -70,6 +75,7 @@ SpriteIndex sprite_index_gate;
 SpriteIndex sprite_index_boneym;
 SpriteIndex sprite_index_pointy;
 SpriteIndex sprite_index_heart;
+SpriteIndex sprite_index_trophy;
 
 
 //Actor Spawn Management
@@ -111,6 +117,9 @@ void effect_update(Actor * a);
 //Heart
 void spawn_heart(int spawn_x,int spawn_y);
 void heart_collect(Actor * a);
+
+void spawn_trophy(int spawn_x,int spawn_y);
+void trophy_collect(Actor * a);
 
 //Gate
 void spawn_gate(int spawn_x,int spawn_y);

@@ -58,6 +58,9 @@ void player_collect_item()
             case OBJ_YORB:
                 yorb_collect(a);
                 break;
+            case OBJ_TROPHY:
+                trophy_collect(a);
+                break;
             case OBJ_HEART:
                 heart_collect(a);
                 break;

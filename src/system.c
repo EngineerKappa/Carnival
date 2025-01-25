@@ -2,7 +2,7 @@
 
 void system_init()
 {
-    
+    menu_init();
 	input_init();
 	SPR_init();
 	BG_init();
@@ -12,7 +12,7 @@ void system_init()
     PAL_setPalette(PAL0, frame.palette->data, DMA);
 	VDP_loadFont(custom_font.tileset, DMA);
 	BG_load_frame();
-    gm_current=GM_TITLE;
+    gm_current=GM_LOGO;
 	
 	gm_start(gm_current);
 }

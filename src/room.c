@@ -9,10 +9,11 @@ void room_init()
     
     gm_state=GAME_STATE_NORMAL;
     gm_timer=0;
-    
+    trophy=NULL;
     BG_display_frame();
     game_pixels_scrolled=0;
     update_hud=true;
+    yorbs_left=0;
     attacker_count=0;
     actor_defending_shake=0;
     u8 x,y,i;
@@ -41,7 +42,10 @@ void room_init()
                 place_floor(x,y);
                 spawn_heart(x,y);
                 break;
-
+            case RS_TROPHY:
+                place_floor(x,y);
+                spawn_trophy(x,y);
+                break;
             case RS_BONEYM_DOWN:
                 place_floor(x,y);
                 spawn_boneym(x,y,DIR_DOWN);

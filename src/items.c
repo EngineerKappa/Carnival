@@ -17,6 +17,7 @@ void spawn_yorb(int spawn_x,int spawn_y)
     SPR_setDepth(a->sprite,SPR_MAX_DEPTH);
     yorb_animate(a->sprite);
     actors_spawned++;
+    yorbs_left++;
 }
     
 void yorb_animate(Sprite* sprite)
@@ -25,18 +26,7 @@ void yorb_animate(Sprite* sprite)
     SPR_setVRAMTileIndex(sprite,tileIndex);
 }
 
-void heart_collect(Actor * a)
-{
-    a->type=OBJ_EFFECT;
-    
-    //SPR_setAnim(a->sprite,1);
-    actor_free(a);
-    if (player_hp<PLAYER_HP_MAX)
-    player_hp++;
-    XGM2_playPCM(snd_heart,sizeof(snd_heart),SOUND_PCM_CH3);
-    update_hud=true;
-    
-}
+
 
 void yorb_collect(Actor * a)
 {
@@ -55,7 +45,15 @@ void yorb_collect(Actor * a)
     XGM2_playPCM(snd_yorb,sizeof(snd_yorb),SOUND_PCM_CH2);
     score+=10;
     update_hud=true;
-    
+    yorbs_left--;
+    if (yorbs_left==0)
+    {
+        if (trophy!=NULL)
+        {
+            SPR_setVisibility(trophy->sprite,VISIBLE);
+            XGM2_playPCM(snd_cymbal,sizeof(snd_cymbal),SOUND_PCM_CH3);
+        }
+    }
 }
 
 void effect_update(Actor * a)
@@ -89,10 +87,51 @@ void spawn_heart(int spawn_x,int spawn_y)
     a->x = spawn_x;
     a->y = spawn_y;
     
-    a->sprite = SPR_addSprite(&spr_heart,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16,TILE_ATTR(PAL0,0,FALSE,a->hflip));
+    a->sprite = SPR_addSprite(&spr_heart,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
     SPR_setAutoTileUpload(a->sprite, FALSE);
     set_sprite_index(a->sprite,sprite_index_heart);
     actors_spawned++;
+}
+
+void heart_collect(Actor * a)
+{
+    a->type=OBJ_EFFECT;
+    actor_free(a);
+    if (player_hp<PLAYER_HP_MAX)
+    player_hp++;
+    XGM2_playPCM(snd_heart,sizeof(snd_heart),SOUND_PCM_CH3);
+    update_hud=true;
+}
+
+void spawn_trophy(int spawn_x,int spawn_y)
+{
+    Actor *a = &actors[actor_find_empty_slot()];
+    actor_set_defaults(a);
+    
+    gate = a;
+    a->type = OBJ_TROPHY;
+    a->x = spawn_x;
+    a->y = spawn_y;
+    
+    a->sprite = SPR_addSprite(&spr_trophy,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
+    SPR_setAutoTileUpload(a->sprite, FALSE);
+    SPR_setVisibility(a->sprite,HIDDEN);
+    set_sprite_index(a->sprite,sprite_index_trophy);
+    actors_spawned++;
+    trophy=a;
+}
+
+
+void trophy_collect(Actor * a)
+{
+    if (yorbs_left>0)
+    return;
+
+    a->type=OBJ_EFFECT;
+    actor_free(a);
+    XGM2_playPCM(snd_trophy,sizeof(snd_trophy),SOUND_PCM_CH3);
+    score+=700;
+    update_hud=true;
 }
 
 void spawn_gate(int spawn_x,int spawn_y)

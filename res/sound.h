@@ -9,6 +9,8 @@ extern const u8 snd_hit[3584];
 extern const u8 snd_zip[5120];
 extern const u8 snd_wilhelm[13312];
 extern const u8 snd_heart[19200];
+extern const u8 snd_cymbal[26112];
+extern const u8 snd_trophy[38400];
 extern const u8 bgm_title[57344];
 extern const u8 bgm_cutscene[38400];
 extern const u8 bgm_fjf[48640];

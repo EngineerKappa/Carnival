@@ -14,7 +14,7 @@ void game_init()
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     PAL_setPalette(PAL3, palette_red, DMA);
     
-    floor_current=2;
+    floor_current=1;
     yorb_count=0;
     step_count=0;
     func_update=game_update;
