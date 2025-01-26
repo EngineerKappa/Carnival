@@ -1,3 +1,5 @@
+#ifndef _HEADERS_H_
+#define _HEADERS_H_
 #include <genesis.h>
 #include <gfx.h>
 #include <sound.h>
@@ -14,3 +16,4 @@
 #include <menus.h>
 
 #include <transition.h>
+#endif
