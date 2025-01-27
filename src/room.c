@@ -2,8 +2,6 @@
 
 const u8 tiledefs[16] = { 0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 
-
-
 void room_init()
 {
     
@@ -19,7 +17,7 @@ void room_init()
     u8 x,y,i;
     x=0;
     y=0;
-
+    text_init();
     VDP_waitVBlank(true);
     for (i=0; i<ROOM_MAX_TILES; i++)
     {
@@ -92,6 +90,8 @@ void room_init()
     game_draw_hud_labels();
     game_draw_hud_text();
 }
+
+
 
 void room_load()
 {

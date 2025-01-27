@@ -8,6 +8,7 @@
 #include <background.h>
 #include <gm_logo.h>
 #include <gm_game.h>
+#include <text.h>
 #include <gm_title.h>
 #include <gm_ending.h>
 #include <actors.h>

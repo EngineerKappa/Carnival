@@ -49,11 +49,11 @@ void transition_animate_enter()
 void transition_animate_exit()
 {
 
-    VDP_fillTileMapRect(BG_A,TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, 0),0,transition_scroll,10,2);
-    VDP_fillTileMapRect(BG_A,TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, 0),20,transition_scroll,10,2);
+    VDP_fillTileMapRect(BG_A,TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, 0),0,transition_scroll,10,2);
+    VDP_fillTileMapRect(BG_A,TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, 0),20,transition_scroll,10,2);
 
-    VDP_fillTileMapRect(BG_A,TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, 0),10,28-transition_scroll,10,2);
-    VDP_fillTileMapRect(BG_A,TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, 0),30,28-transition_scroll,10,2);
+    VDP_fillTileMapRect(BG_A,TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, 0),10,28-transition_scroll,10,2);
+    VDP_fillTileMapRect(BG_A,TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, 0),30,28-transition_scroll,10,2);
 
     /*
     u8 i;

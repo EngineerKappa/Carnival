@@ -12,7 +12,7 @@ void system_init()
     PAL_setPalette(PAL0, frame.palette->data, DMA);
 	VDP_loadFont(custom_font.tileset, DMA);
 	BG_load_frame();
-    gm_current=GM_LOGO;
+    gm_current=GM_GAME;
 	
 	gm_start(gm_current);
 }
@@ -25,6 +25,10 @@ void system_update()
 	if (menu_state==MENU_STATE_ACTIVE)
 	{
 		menu_update();
+	}
+	if (textbox_state==TEXT_STATE_TYPING)
+	{
+		text_update();
 	}
 	
 }
