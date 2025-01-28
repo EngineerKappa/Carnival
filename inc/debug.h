@@ -1,0 +1,2 @@
+#define DEBUG_GM GM_GAME
+#define DEBUG_FLOOR 8

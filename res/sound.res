@@ -16,4 +16,5 @@ WAV snd_wilhelm "sfx/sfx_yell_wilhelm.wav" XGM2
 WAV snd_heart "sfx/sfx_heart.wav" XGM2 
 WAV snd_cymbal "sfx/sfx_cymbal_crash.wav" XGM2 
 WAV snd_trophy "sfx/sfx_trophy.wav" XGM2 
+WAV snd_explode "sfx/sfx_explode_short.wav" XGM2 
 

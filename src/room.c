@@ -1,6 +1,22 @@
 #include <headers.h>
 
-const u8 tiledefs[16] = { 0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+const u8 tiledefs[16] = {
+    0, //Floor
+    0, 
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,//Blast Floor
+    0,//Blast Floor Shadow
+    0,
+    0,
+    0,
+    0,
+    0};
 
 void room_init()
 {
@@ -14,6 +30,7 @@ void room_init()
     yorbs_left=0;
     attacker_count=0;
     actor_defending_shake=0;
+    fusedropper_timer=0;
     u8 x,y,i;
     x=0;
     y=0;
@@ -75,6 +92,23 @@ void room_init()
             case RS_POINTY_DOWN:
                 place_floor(x,y);
                 spawn_pointy(x,y,DIR_DOWN);
+                break;
+            
+            case RS_FUSEDROPPER_UP:
+                place_floor(x,y);
+                spawn_fusedropper(x,y,DIR_UP);
+                break;
+            case RS_FUSEDROPPER_RIGHT:
+                place_floor(x,y);
+                spawn_fusedropper(x,y,DIR_RIGHT);
+                break;
+            case RS_FUSEDROPPER_LEFT:
+                place_floor(x,y);
+                spawn_fusedropper(x,y,DIR_LEFT);
+                break;
+            case RS_FUSEDROPPER_DOWN:
+                place_floor(x,y);
+                spawn_fusedropper(x,y,DIR_DOWN);
                 break;
             default:
                 place_tile(x,y,room_data[i]);

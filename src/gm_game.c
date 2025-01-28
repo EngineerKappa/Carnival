@@ -10,11 +10,12 @@ void game_init()
     actors_init();
     VDP_loadTileSet(&castle_tileset,BG_VRAM_ind,DMA);
     VRAM_ind+=castle_tileset.numTile;
+    VDP_waitVBlank(false);
     PAL_setPalette(PAL1, spr_swordsman.palette->data, DMA);
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     PAL_setPalette(PAL3, palette_red, DMA);
     
-    floor_current=1;
+    floor_current=DEBUG_FLOOR;
     yorb_count=0;
     step_count=0;
     func_update=game_update;

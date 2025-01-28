@@ -30,6 +30,9 @@ SPRITE  spr_boneym    "gfx/boneym.png" 2 2 BEST 10
 SPRITE  spr_pointy    "gfx/pointy.png" 2 2 BEST 10
 SPRITE  spr_heart    "gfx/heart.png" 2 2 BEST 0
 SPRITE  spr_trophy    "gfx/trophy.png" 2 2 BEST 0
+SPRITE  spr_fusedropper    "gfx/fusedropper.png" 2 2 BEST 10
+SPRITE  spr_barrel    "gfx/barrel.png" 2 2 BEST 10
+SPRITE  spr_sword    "gfx/sword.png" 2 2 BEST 0
 
 
 IMAGE bg_gameover "gfx/gameover.png" BEST ALL

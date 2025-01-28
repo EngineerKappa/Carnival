@@ -10,7 +10,8 @@ void text_check_room()
     switch (floor_current)
     {
         case 1: p_text_current=str_hint_first; break;
-        case 2: p_text_current=str_hint_boneym; break;
+        case 2: p_text_current=str_hint_wait; break;
+        case 4: p_text_current=str_hint_boneym; break;
     
         default: textbox_state=TEXT_STATE_INACTIVE; break;
     }
@@ -22,7 +23,14 @@ void text_init()
     text_x=TEXTBOX_X;
     text_y=TEXTBOX_Y;
     textbox_anim=0;
-    text_check_room();
+    if (gm_current==GM_GAME)
+    {
+        text_check_room();
+    }
+    else
+    {
+        textbox_state=TEXT_STATE_INACTIVE;
+    }
 }
 
 void textbox_draw_char(char destination_char)
@@ -43,7 +51,9 @@ void text_update()
     }
     u8 word_size=0;
     char wrap_char;
+    
     char_current=*(p_text_current + text_copy_count);
+
     for (size_t i = 0; i < 20; i++)
     {
         wrap_char=*(p_text_current + text_copy_count + i);

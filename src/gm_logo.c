@@ -23,17 +23,22 @@ void logo_init()
     palcycle_index=3;
     //PAL_setColors(PAL2*16,palette_black,16,DMA);
     func_update=logo_update;
-    PAL_setPalette(PAL1, palette_engineerkappa_2.data, DMA);
-    PAL_setPalette(PAL0, bg_engineerkappa.palette->data, DMA);
-    VDP_drawImageEx(BG_B,&bg_engineerkappa,TILE_ATTR_FULL(PAL1, true, false, false, BG_VRAM_ind),6,0,false,true);
+    
     kappa_x=-128;
     eris_x=-64;
     gm_state=LOGO_STATE_SCROLL;
-    VDP_setVerticalScroll(BG_B,-background_y);
+    
     
     sprite_kappa=SPR_addSprite(&spr_kappa,kappa_x,150,TILE_ATTR(PAL2,0,FALSE,FALSE));
     sprite_eris=SPR_addSprite(&spr_eris,eris_x,150,TILE_ATTR(PAL3,0,FALSE,FALSE));
     sprite_boxer=SPR_addSprite(&spr_boxer,eris_x,150-24,TILE_ATTR(PAL3,0,FALSE,FALSE));
+    VDP_waitVBlank(true);
+    VDP_setVerticalScroll(BG_B,-background_y);
+    PAL_setPalette(PAL1, palette_engineerkappa_2.data, DMA);
+    PAL_setPalette(PAL0, bg_engineerkappa.palette->data, DMA);
+    PAL_setPalette(PAL2, spr_kappa.palette->data, DMA);
+    PAL_setPalette(PAL3, spr_eris.palette->data, DMA);
+    VDP_drawImageEx(BG_B,&bg_engineerkappa,TILE_ATTR_FULL(PAL1, true, false, false, BG_VRAM_ind),6,0,false,true);
 }
 
 void logo_skip()
@@ -111,9 +116,6 @@ void logo_update()
             //PAL_setPalette(PAL1, bg_engineerkappa.palette->data, DMA);
             VDP_drawTextBG(BG_B,"Presents...",15,3);
             XGM2_play(bgm_engineerkappa);
-
-            PAL_setPalette(PAL2, spr_kappa.palette->data, DMA);
-            PAL_setPalette(PAL3, spr_eris.palette->data, DMA);
         }
 
         VDP_setVerticalScroll(BG_B,-background_y);
@@ -121,7 +123,7 @@ void logo_update()
 
     if (gm_state==LOGO_STATE_FLASH)
     {
-        palcycle_process();
+       
         if (kappa_x < 400)
         {
             kappa_x+=3;
@@ -139,6 +141,7 @@ void logo_update()
         SPR_setPosition(sprite_kappa,kappa_x,150);
         SPR_setPosition(sprite_eris,eris_x,150);
         SPR_setPosition(sprite_boxer,eris_x-16 + (sinFix16(eris_x*2) / 16),150 + (sinFix16(eris_x*6) / 16));
-
+        VDP_waitVBlank(false);
+        palcycle_process();
     }
 }

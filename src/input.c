@@ -28,6 +28,14 @@ void game_check_turn()
 							actor_attacking=player;
 							actor_defending=a;
 							return;
+						case OBJ_FUSEDROPPER:
+							player->target_x=player->x;
+							player->target_y=player->y;
+							gm_state=GAME_STATE_ATTACK;
+							gm_timer=0;
+							actor_attacking=player;
+							actor_defending=a;
+							return;
 						case OBJ_POINTY: //Hack to make it so if the player walks face first into a pointy, they get what's coming to em
 							if (player->facing_dir==dir_get_180(a->facing_dir))
 							{

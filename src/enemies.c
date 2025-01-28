@@ -18,6 +18,128 @@ void enemy_take_damage(Actor * a)
     }
 }
 
+void spawn_fusedropper(int spawn_x, int spawn_y,u8 facing_dir)
+{
+    Actor *a = &actors[actor_find_empty_slot()];
+    actor_set_defaults(a);
+    a->type = OBJ_FUSEDROPPER;
+    a->x = spawn_x;
+    a->y = spawn_y;
+    a->hp = 1;
+    a->target_x=spawn_x;
+    a->target_y=spawn_y;
+    a->collision_layer=BM_LAYER_ENEMY;
+    a->facing_dir=facing_dir;
+    a->act_move_start=fusedropper_update;
+    a->sprite = SPR_addSprite(&spr_fusedropper,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
+    SPR_setAutoTileUpload(a->sprite, FALSE);
+    SPR_setFrameChangeCallback(a->sprite, &fusedropper_animate);
+    fusedropper_animate(a->sprite);
+    SPR_setDepth(a->sprite,SPR_MIN_DEPTH);
+    actors_spawned++;
+}
+
+void fusedropper_animate(Sprite* sprite)
+{
+    u16 tileIndex = sprite_index_fusedropper[sprite->animInd][sprite->frameInd];
+    SPR_setVRAMTileIndex(sprite,tileIndex);
+}
+
+void fusedropper_update(Actor * a)
+{
+    if (fusedropper_timer==0)
+    {
+        if (actors_spawned < MAX_ACTORS)
+        {
+            spawn_barrel(a->x,a->y,a->facing_dir);
+        }
+    }
+}
+
+void spawn_barrel(int spawn_x, int spawn_y,u8 facing_dir)
+{
+    Actor *a = &actors[actor_find_empty_slot()];
+    a->type = OBJ_BARREL;
+    a->x = spawn_x;
+    a->y = spawn_y;
+    a->target_x=spawn_x;
+    a->target_y=spawn_y;
+    a->state = 0;
+    a->collision_layer=BM_LAYER_HAZARD;
+    a->collision_mask=BM_MASK_POINTY;
+    a->facing_dir=facing_dir;
+    a->hflip = false;
+    a->vflip = false;
+    a->sprite = NULL;
+    a->act_realtime = NULL;
+    a->act_move_start=barrel_update;
+    a->act_move_finish=barrel_attack;
+    a->sprite = SPR_addSprite(&spr_barrel,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
+    SPR_setAutoTileUpload(a->sprite, FALSE);
+    SPR_setFrameChangeCallback(a->sprite, &barrel_animate);
+    SPR_setDepth(a->sprite,SPR_MIN_DEPTH+1);
+    actors_spawned++;
+}
+
+void barrel_animate(Sprite* sprite)
+{
+    u16 tileIndex = sprite_index_barrel[sprite->animInd][sprite->frameInd];
+    SPR_setVRAMTileIndex(sprite,tileIndex);
+}
+
+void barrel_update(Actor * a)
+{
+    if (a->timer>=1)
+    {
+        actor_free(a);
+        return;
+    }
+
+    if (a->facing_dir == DIR_DOWN | a->facing_dir == DIR_UP)
+    SPR_setAnim(a->sprite,0);
+    if (a->facing_dir == DIR_LEFT | a->facing_dir == DIR_RIGHT)
+    SPR_setAnim(a->sprite,1);
+
+
+    int8_t target_x,target_y;
+    target_x=a->x+dir_get_x(a->facing_dir);
+    target_y=a->y+dir_get_y(a->facing_dir);
+
+    if (blockmap_check(target_x,target_y) & BM_MASK_POINTY)
+    {
+        a->timer++;
+        SPR_setAnim(a->sprite,2);
+        XGM2_playPCM(snd_explode,sizeof(snd_explode),SOUND_PCM_CH3);
+    }
+    else
+    {
+        a->target_x=target_x;
+        a->target_y=target_y;
+    }
+
+    if (a->target_x==player->x && a->target_y==player->y && a->x==player->target_x && a->y==player->target_y) //Intercept player movement
+    {
+        player->target_x=player->x;
+        player->target_y=player->y;
+    }
+    actor_set_blockmap(a,BM_LAYER_HAZARD);
+}
+
+void barrel_attack(Actor * a)
+{    
+    if (!(a->x==player->x && a->y==player->y))
+    return;
+    SPR_setAnim(a->sprite,2);
+    XGM2_playPCM(snd_explode,sizeof(snd_explode),SOUND_PCM_CH2);
+    attacker_count=1;
+    actor_attacking=NULL;
+    actor_defending=player;
+    gm_timer=0;
+    gm_state=GAME_STATE_ATTACK;
+    a->timer=1;
+}
+
+
 void spawn_pointy(int spawn_x, int spawn_y,u8 facing_dir)
 {
     Actor *a = &actors[actor_find_empty_slot()];

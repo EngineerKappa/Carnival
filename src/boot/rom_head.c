@@ -12,7 +12,7 @@ const ROMHeader rom_header = {
     "(C)ENGINEERKAPPA",
     "SUPER FREAKS PRESENTS: SWORDSMAZE               ",
     "SUPER FREAKS PRESENTS: SWORDSMAZE               ",
-    "GM 00000000-00",
+    "GM BONES!!!-69",
     0x000,
     "JD              ",
     0x00000000,

@@ -24,6 +24,9 @@ extern const SpriteDefinition spr_boneym;
 extern const SpriteDefinition spr_pointy;
 extern const SpriteDefinition spr_heart;
 extern const SpriteDefinition spr_trophy;
+extern const SpriteDefinition spr_fusedropper;
+extern const SpriteDefinition spr_barrel;
+extern const SpriteDefinition spr_sword;
 extern const Image bg_gameover;
 extern const SpriteDefinition spr_uitext;
 

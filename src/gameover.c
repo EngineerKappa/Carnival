@@ -22,6 +22,7 @@ void game_update_death()
     {
         SPR_setAnim(player->sprite,2);
         SPR_setVFlip(player->sprite,true);
+        VDP_waitVBlank(false);
         PAL_fadeOutPalette(PAL2,30,true);       
     }
 

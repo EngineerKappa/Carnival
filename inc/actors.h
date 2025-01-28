@@ -61,6 +61,7 @@ int8_t actor_defending_shake;
 u8 attacker_count;
 u8 actors_spawned;
 bool actor_defending_will_counter;
+u8 fusedropper_timer;
 
 #define MAX_ACTORS 80
 Actor actors[MAX_ACTORS];
@@ -74,6 +75,9 @@ SpriteIndex sprite_index_yorb;
 SpriteIndex sprite_index_gate;
 SpriteIndex sprite_index_boneym;
 SpriteIndex sprite_index_pointy;
+SpriteIndex sprite_index_fusedropper;
+SpriteIndex sprite_index_barrel;
+SpriteIndex sprite_index_sword;
 SpriteIndex sprite_index_heart;
 SpriteIndex sprite_index_trophy;
 
@@ -138,8 +142,14 @@ void pointy_animate(Sprite* sprite);
 void pointy_update(Actor * a);
 void pointy_attack(Actor * a);
 
+//Fusedropper
+void spawn_fusedropper(int spawn_x,int spawn_y,u8 facing_dir);
+void fusedropper_animate(Sprite* sprite);
+void fusedropper_update(Actor * a);
 
-
-
-
+//Barrel
+void spawn_barrel(int spawn_x,int spawn_y,u8 facing_dir);
+void barrel_animate(Sprite* sprite);
+void barrel_update(Actor * a);
+void barrel_attack(Actor * a);
 

@@ -15,6 +15,7 @@
 #include <player.h>
 #include <room.h>
 #include <menus.h>
+#include <debug.h>
 
 #include <transition.h>
 #endif

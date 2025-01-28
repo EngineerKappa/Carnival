@@ -15,16 +15,24 @@ void actor_sprite_init()
     sprite_index_pointy=SPR_loadAllFrames(&spr_pointy,SPR_VRAM_ind,&numTile);
     SPR_VRAM_ind+=numTile;
     sprite_index_trophy=SPR_loadAllFrames(&spr_trophy,SPR_VRAM_ind,&numTile);
+    SPR_VRAM_ind+=numTile;
+    sprite_index_fusedropper=SPR_loadAllFrames(&spr_fusedropper,SPR_VRAM_ind,&numTile);
+    SPR_VRAM_ind+=numTile;
+    sprite_index_barrel=SPR_loadAllFrames(&spr_barrel,SPR_VRAM_ind,&numTile);
+    SPR_VRAM_ind+=numTile;
+    sprite_index_sword=SPR_loadAllFrames(&spr_sword,SPR_VRAM_ind,&numTile);
+    
 }
 
 void actors_init(){
     actors_spawned=0;
+    fusedropper_timer=0;
     turn_updated=false;
     actor_sprite_init();
     player_init();
 }
 
-void actor_set_defaults(Actor *a)
+inline void actor_set_defaults(Actor *a)
 {
     a->type = OBJ_EMPTY;
     a->x = 0;
@@ -89,10 +97,18 @@ void actors_update()
         if ((a->type != OBJ_EMPTY) && (a->act_move_start!=NULL))
         a->act_move_start(a);
     }
+    fusedropper_timer++;
+    if (fusedropper_timer==3)
+    {
+        fusedropper_timer=0;
+    }
 }
 
 void actor_face_dir(Actor* a)
 {
+    if (a->type == OBJ_FUSEDROPPER) //hack
+    return;
+
     if (a->facing_dir>DIR_DOWN)
     a->facing_dir=DIR_RIGHT;
     switch (a->facing_dir) 
@@ -191,7 +207,8 @@ void actor_set_position(Actor* a, u8 target_x,u8 target_y)
     a->y=target_y;
     a->target_x=target_x;
     a->target_y=target_y;
-    SPR_setPosition(a->sprite,WINDOW_X+a->x * 16,WINDOW_Y+a->y * 16 - 4);
+
+    SPR_setPosition(a->sprite,WINDOW_X+(target_x << 4),WINDOW_Y+(target_y << 4) - 4);
 }
 
 void game_scroll_all_actors()
@@ -207,15 +224,22 @@ void game_scroll_all_actors()
 
 void actor_scroll(Actor* a)
 {
-    if (a->x > a->target_x)
-        a->scroll_x=-game_pixels_scrolled;
-    if (a->x < a->target_x)
-        a->scroll_x=game_pixels_scrolled;
-    if (a->y < a->target_y)
-        a->scroll_y=game_pixels_scrolled;
-    if (a->y > a->target_y)
+    s8 x=a->x;
+    s8 y=a->y;
+    s8 tx=a->target_x;
+    s8 ty=a->target_y;
+
+    if (x > tx)
+        {a->scroll_x=-game_pixels_scrolled;}
+    else if (x < tx)
+        {a->scroll_x=game_pixels_scrolled;}
+    
+    if (y < ty)
+        {a->scroll_y=game_pixels_scrolled;}
+    else if (y > ty)
         a->scroll_y=-game_pixels_scrolled;
-    SPR_setPosition(a->sprite,WINDOW_X+a->x * 16 + a->scroll_x, WINDOW_Y+a->y * 16 - 4 + a->scroll_y);
+    
+    SPR_setPosition(a->sprite,WINDOW_X+(x << 4) + a->scroll_x, WINDOW_Y+(y << 4) - 4 + a->scroll_y);
 }
 
 void game_scroll_end()
