@@ -7,6 +7,8 @@ enum {
     GAME_STATE_GAMEOVER
 };
 
+#define STEP_BONUS_MAX 1000
+
 u8 gate_speed;
 u8 game_pixels_scrolled;
 
@@ -14,6 +16,12 @@ u8 floor_current;
 u16 yorb_count;
 u16 yorbs_left;
 u16 score;
+u16 score_best;
+u8 floors_cleared;
+u8 trophies_found;
+bool floor_trophy_spawned;
+bool floor_trophy_found;
+u16 step_bonus;
 u16 step_count;
 bool update_hud;
 bool game_clear;

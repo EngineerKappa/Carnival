@@ -6,6 +6,8 @@ void game_draw_hud_labels()
     VDP_drawTextBG(BG_B,"Swordsman",28,7);
     VDP_drawTextBG(BG_B,"Floor ",28,5);
     VDP_drawTextBG(BG_B,"Yorbs",28,11);
+    VDP_drawTextBG(BG_B,"Bonus",28,18);
+
     VDP_drawTextBG(BG_B,"Score",28,23);
 }
 
@@ -38,8 +40,37 @@ void game_draw_hud_text()
     intToStr(yorb_count,str,2);
     VDP_drawTextBG(BG_B,str,32,13);
 
+    if (step_bonus>0)
+    {
+        intToStr(step_bonus,str,4);
+        
+        //Step Bonus
+        if (floor_trophy_found)
+        {
+            VDP_drawTextBG(BG_B,"FOUND!",30,20);
+            VDP_drawTextBG(BG_B,"+",30,21);
+            VDP_drawTextBG(BG_B,str,31,21);
+        }
+        else
+        {
+            VDP_drawTextBG(BG_B,str,31,20);
+        }
+    }
+    else
+    {
+        VDP_drawTextBG(BG_B,"NO BONUS",29,20);
+    }
+
+    if (gm_state==GAME_STATE_GATE && !floor_trophy_found)
+    {
+        VDP_drawTextBG(BG_B,"NO TROPHY",29,20);
+    }
+
     //Score
     intToStr(score,str,5);
     VDP_drawTextBG(BG_B,str,30,25);
+
+    
+
     update_hud=false;
 }

@@ -48,7 +48,14 @@ void ending_update_score()
 {
     char str[10];
     intToStr(score,str,5);
-    VDP_drawTextBG(BG_A,str,23,23);
+    VDP_drawTextBG(BG_A,str,16,21);
+    intToStr(score_best,str,5);
+    VDP_drawTextBG(BG_A,str,16,23);
+
+    intToStr(trophies_found,str,2);
+    VDP_drawTextBG(BG_A,str,35,21);
+    intToStr(step_count,str,4);
+    VDP_drawTextBG(BG_A,str,33,23);
 }
 
 void ending_update()
@@ -87,8 +94,12 @@ void ending_update()
         if (gm_timer==0)
         {
             
-            VDP_fillTileMapRect(BG_B,12,0,22,40,3);
-            VDP_drawTextBG(BG_A,"Final Score:",10,23);
+            VDP_fillTileMapRect(BG_B,12,0,20,40,5);
+            VDP_drawTextBG(BG_A,"Final Score:",3,21);
+            VDP_drawTextBG(BG_A,"Best  Score:",3,23);
+            VDP_drawTextBG(BG_A,"Trophies:",25,21);
+            VDP_drawTextBG(BG_A,"Steps   :",25,23);
+            
             ending_update_score();
             
         }
@@ -107,6 +118,8 @@ void ending_update()
                     XGM2_playPCM(snd_heart,sizeof(snd_heart),SOUND_PCM_CH3);
                     VDP_fillTileMapRectInc(BG_B,UI_VRAM_ind+6,5+(hp_counted*3),11,2,2);
                     score+=100;
+                    score_best=max(score,score_best);
+                    
                     ending_update_score();
                 }
                 else
@@ -116,8 +129,15 @@ void ending_update()
                 }
                 hp_counted++;
             }
+            
         }
-
+        if (gm_timer==30)
+        {
+            sram_save();
+            VDP_drawTextBG(BG_A,"Press START to continue",8,26);
+            VDP_setTileMapXY(BG_A, TILE_ATTR_FULL(PAL0, TRUE, FALSE, FALSE, UI_VRAM_ind + 3),6,26);
+            VDP_setTileMapXY(BG_A, TILE_ATTR_FULL(PAL0, TRUE, FALSE, TRUE, UI_VRAM_ind + 3),32,26);
+        }
         if (gm_timer>30)
         {
             if (joy_pressed(BUTTON_START))

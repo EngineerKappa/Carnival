@@ -49,6 +49,11 @@ void game_check_turn()
 		}
 		
 		step_count++;
+		if (step_bonus>0 && !floor_trophy_spawned)
+		{
+			step_bonus-=10;
+		}
+		update_hud=true;
 		gm_state=GAME_STATE_MOVE;
 		actors_update();
 		turn_updated=true;

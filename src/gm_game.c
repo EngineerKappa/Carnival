@@ -2,10 +2,7 @@
 
 
 void game_init()
-{
-    
-    room_list_init();
-    
+{    
     actors_clear_all(true);
     actors_init();
     VDP_loadTileSet(&castle_tileset,BG_VRAM_ind,DMA);
@@ -15,9 +12,11 @@ void game_init()
     PAL_setPalette(PAL2, castle_palette.data, DMA);
     PAL_setPalette(PAL3, palette_red, DMA);
     
-    floor_current=DEBUG_FLOOR;
+    
     yorb_count=0;
     step_count=0;
+    trophies_found=0;
+    step_bonus=STEP_BONUS_MAX;
     func_update=game_update;
     update_hud=true;
     score=0;
@@ -25,7 +24,6 @@ void game_init()
     game_clear=false;
     room_load();
     room_init();
-    SYS_setVBlankCallback(game_draw_hud_text);
     XGM2_play(bgm_fjf);
 }
 
@@ -112,7 +110,6 @@ void game_update_attack()
             damage=4;
             if (actor_defending->facing_dir==dir_get_180(player->facing_dir))
             {
-                damage=1;
                 actor_defending_will_counter=true;
             }
 
@@ -233,6 +230,7 @@ void game_end()
 
 void game_update()
 {
+
     switch (gm_state)
     {
         case GAME_STATE_NORMAL:

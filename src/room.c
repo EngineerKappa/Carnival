@@ -18,6 +18,19 @@ const u8 tiledefs[16] = {
     0,
     0};
 
+void room_set_step_bonus()
+{
+    switch (floor_current)
+    {
+    case 1: step_bonus=500; break;
+    case 2: step_bonus=600; break;
+    case 3: step_bonus=800; break;
+    case 6: step_bonus=1400; break;
+    case 7: step_bonus=1200; break;
+    default:step_bonus=STEP_BONUS_MAX;break;
+    }
+}
+
 void room_init()
 {
     
@@ -28,9 +41,12 @@ void room_init()
     game_pixels_scrolled=0;
     update_hud=true;
     yorbs_left=0;
+    floor_trophy_found=false;
     attacker_count=0;
     actor_defending_shake=0;
     fusedropper_timer=0;
+    floor_trophy_spawned=false;
+    room_set_step_bonus();
     u8 x,y,i;
     x=0;
     y=0;
@@ -141,6 +157,8 @@ void room_end(bool restart)
 
     if (!restart)
     {
+        floors_cleared = max(floor_current,floors_cleared);
+        sram_save();
         floor_current ++;
         if (floor_current>MAX_ROOMS)
         floor_current=1;

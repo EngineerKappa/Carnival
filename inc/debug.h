@@ -1,2 +1,2 @@
-#define DEBUG_GM GM_GAME
-#define DEBUG_FLOOR 8
+#define DEBUG_GM GM_LOGO
+#define DEBUG_FLOOR 1

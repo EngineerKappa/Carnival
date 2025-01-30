@@ -10,6 +10,10 @@ int main()
 		SPR_update();
 		SYS_doVBlankProcess();
 		transition_animate();
+		if (gm_current==GM_GAME)
+		{
+			game_draw_hud_text();
+		}
 		input_update();
 	}
 	return (0);

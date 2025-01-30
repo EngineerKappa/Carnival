@@ -50,6 +50,7 @@ void yorb_collect(Actor * a)
     {
         if (trophy!=NULL)
         {
+            floor_trophy_spawned=true;
             SPR_setVisibility(trophy->sprite,VISIBLE);
             XGM2_playPCM(snd_cymbal,sizeof(snd_cymbal),SOUND_PCM_CH3);
         }
@@ -130,7 +131,9 @@ void trophy_collect(Actor * a)
     a->type=OBJ_EFFECT;
     actor_free(a);
     XGM2_playPCM(snd_trophy,sizeof(snd_trophy),SOUND_PCM_CH3);
-    score+=700;
+    score+=step_bonus;
+    trophies_found++;
+    floor_trophy_found=true;
     update_hud=true;
 }
 

@@ -1,6 +1,7 @@
 enum {
     TITLE_STATE_NORMAL = 0,
-    TITLE_STATE_CREDITS
+    TITLE_STATE_CREDITS,
+    TITLE_STATE_FLOORSELECT
 };
 
 void title_init();

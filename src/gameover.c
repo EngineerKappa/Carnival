@@ -44,6 +44,13 @@ void game_update_death()
 
     if (gm_timer == 120)
     {
+        score_best=max(score,score_best);
+        sram_save();
+        char str[10];
+        intToStr(score_best,str,5);
+        VDP_drawTextBG(BG_A,"Best Score: ",1,26);
+        VDP_drawTextBG(BG_A,str,13,26);
+
         gm_state=GAME_STATE_GAMEOVER;
         menu_create(9,18);
         menu_add_option(" CONTINUE ", menu_gameover_continue);

@@ -95,9 +95,9 @@ void barrel_update(Actor * a)
         return;
     }
 
-    if (a->facing_dir == DIR_DOWN | a->facing_dir == DIR_UP)
+    if ((a->facing_dir == DIR_DOWN) | (a->facing_dir == DIR_UP))
     SPR_setAnim(a->sprite,0);
-    if (a->facing_dir == DIR_LEFT | a->facing_dir == DIR_RIGHT)
+    if ((a->facing_dir == DIR_LEFT) | (a->facing_dir == DIR_RIGHT))
     SPR_setAnim(a->sprite,1);
 
 
