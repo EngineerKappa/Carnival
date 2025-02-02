@@ -73,6 +73,13 @@ void game_update_attack()
     
     if (gm_timer==0)
     {
+        if (actor_attacking==player)
+        {
+            if (actors_spawned<MAX_ACTORS)
+            {
+                spawn_sword(player->x,player->y,player->facing_dir);
+            }
+        }
         actor_defending_shake=6;
         actor_defending_will_counter=false;
         if (actor_attacking!=NULL)

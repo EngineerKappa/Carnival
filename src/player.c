@@ -30,7 +30,7 @@ void player_reset()
     player->collision_mask = BM_MASK_PLAYER;
     SPR_setVFlip(player->sprite,false);
     SPR_setPriority(player->sprite,false);
-    SPR_setDepth(player->sprite,SPR_MIN_DEPTH);
+    SPR_setDepth(player->sprite,SPR_MIN_DEPTH+1);
     actor_face_dir(player);
     actor_target_forward(player);
 
@@ -38,8 +38,65 @@ void player_reset()
 
 void player_step()
 {
-    
     //player_collect_item();
+}
+
+void spawn_sword(int spawn_x,int spawn_y,u8 facing_dir)
+{
+    Actor *a = &actors[actor_find_empty_slot()];
+    actor_set_defaults(a);
+    a->type = OBJ_EFFECT;
+    a->x = spawn_x;
+    a->y = spawn_y;
+    a->timer = 0;
+    a->frame = 0;
+    a->target_x=spawn_x;
+    a->target_y=spawn_y;
+    a->facing_dir=facing_dir;
+    a->act_realtime=sword_animate;
+    a->sprite = SPR_addSprite(&spr_sword,WINDOW_X+a->x * 16 + (dir_get_x(facing_dir)*12),WINDOW_Y+a->y * 16 - 4 + (dir_get_y(facing_dir)*12),TILE_ATTR(PAL1,0,FALSE,a->hflip));
+    SPR_setAutoTileUpload(a->sprite, FALSE);
+    set_sprite_index(a->sprite, sprite_index_sword);
+    SPR_setDepth(a->sprite,SPR_MIN_DEPTH);
+    SPR_setAlwaysOnTop(a->sprite);
+    actors_spawned++;
+    switch (facing_dir)
+    {
+    case DIR_DOWN:
+        SPR_setAnim(a->sprite,1);
+        
+        break;
+    case DIR_UP:
+        SPR_setAnim(a->sprite,1);
+        SPR_setVFlip(a->sprite,true);
+        break;
+    case DIR_LEFT:
+        SPR_setHFlip(a->sprite,true);
+        break;
+    
+    default:
+        break;
+    }
+}
+
+void sword_animate(Actor * a)
+{
+    a->timer++;
+    if (a->timer>3)
+    {
+        a->frame++;
+        a->timer=0;
+
+        if (a->frame>=4)
+        {
+            actor_free(a);
+            return;
+        }
+    }
+
+    SPR_setFrame(a->sprite,a->frame);
+    u16 tileIndex = sprite_index_sword[a->sprite->animInd][a->sprite->frameInd];
+    SPR_setVRAMTileIndex(a->sprite,tileIndex);
 }
 
 void player_collect_item()

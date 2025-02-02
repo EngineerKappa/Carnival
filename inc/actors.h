@@ -129,6 +129,10 @@ void trophy_collect(Actor * a);
 void spawn_gate(int spawn_x,int spawn_y);
 void gate_animate(Sprite* sprite);
 
+//Sword
+void spawn_sword(int spawn_x,int spawn_y,u8 facing_dir);
+void sword_animate(Actor * a);
+
 //Boney M
 void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir);
 void boneym_turn_start(Actor * a);

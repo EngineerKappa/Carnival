@@ -77,7 +77,7 @@ void spawn_barrel(int spawn_x, int spawn_y,u8 facing_dir)
     a->sprite = SPR_addSprite(&spr_barrel,WINDOW_X+a->x * 16 ,WINDOW_Y+a->y * 16 - 4,TILE_ATTR(PAL0,0,FALSE,a->hflip));
     SPR_setAutoTileUpload(a->sprite, FALSE);
     SPR_setFrameChangeCallback(a->sprite, &barrel_animate);
-    SPR_setDepth(a->sprite,SPR_MIN_DEPTH+1);
+    SPR_setDepth(a->sprite,SPR_MIN_DEPTH+2);
     actors_spawned++;
 }
 
@@ -158,7 +158,7 @@ void spawn_pointy(int spawn_x, int spawn_y,u8 facing_dir)
     SPR_setAutoTileUpload(a->sprite, FALSE);
     SPR_setFrameChangeCallback(a->sprite, &pointy_animate);
     pointy_animate(a->sprite);
-    SPR_setDepth(a->sprite,SPR_MIN_DEPTH+1);
+    SPR_setDepth(a->sprite,SPR_MIN_DEPTH+2);
     actors_spawned++;
 }
 
@@ -228,7 +228,7 @@ void spawn_boneym(int spawn_x,int spawn_y,u8 facing_dir)
     actor_face_dir(a);
     SPR_setFrameChangeCallback(a->sprite, &boneym_animate);
     boneym_animate(a->sprite);
-    SPR_setDepth(a->sprite,SPR_MIN_DEPTH+1);
+    SPR_setDepth(a->sprite,SPR_MIN_DEPTH+2);
     actors_spawned++;
 }
 
@@ -338,6 +338,9 @@ void boneym_target_player(Actor * a)
 
 void boneym_attack(Actor * a)
 {
+    if (gm_state==GAME_STATE_GATE)
+    return;
+
     //If the Boney just turned, don't attack immediately
     if (a->state==1)
     {

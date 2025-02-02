@@ -98,7 +98,7 @@ void actors_update()
         a->act_move_start(a);
     }
     fusedropper_timer++;
-    if (fusedropper_timer==3)
+    if (fusedropper_timer==4)
     {
         fusedropper_timer=0;
     }

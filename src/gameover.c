@@ -29,7 +29,8 @@ void game_update_death()
     if (gm_timer==90)
     {
         actors_clear_all(false);
-        
+        VDP_clearTileMapRect(BG_B,TEXTBOX_X-1,TEXTBOX_Y-1,TEXTBOX_WIDTH,TEXTBOX_HEIGHT+1);
+        VDP_clearTileMapRect(BG_A,TEXTBOX_X-1,TEXTBOX_Y-1,TEXTBOX_WIDTH,TEXTBOX_HEIGHT+1);
         VDP_drawImageEx(BG_A,&bg_gameover,TILE_ATTR_FULL(PAL0, true, false, false, VRAM_ind),3,2,false,true);
         
         if (random() % 5 > 1)
@@ -44,6 +45,11 @@ void game_update_death()
 
     if (gm_timer == 120)
     {
+        if (floor_trophy_found && trophies_found > 0)
+        {
+            trophies_found--;
+        }
+
         score_best=max(score,score_best);
         sram_save();
         char str[10];

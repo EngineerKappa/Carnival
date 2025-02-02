@@ -1,7 +1,7 @@
 #include <headers.h>
 
-char *str_lungs = "the lungs will diffuse it into your bloodstream and carry it around your muscles to replenish them";
 char *str_imfreaks = "im freaks. ";
+char *str_lungs = "the lungs will diffuse it into your bloodstream and carry it around your muscles to replenish them";
 
 void sram_save()
 {
@@ -88,7 +88,6 @@ void sram_load()
     	//intToStr(sr_checksum,str,0);
 		//VDP_drawText(str,1,4);
 		//VDP_drawText("found in SRAM",1,5);
-
 
 		//VDP_waitVBlank(true);
 		//waitMs(400);

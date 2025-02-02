@@ -3,6 +3,7 @@
 char *str_hint_first = "I need to escape CASTLE KRANION! The portal should take me to the next floor.";
 char *str_hint_wait = "I can press the A, B, or C buttons if I need to STALL for time!";
 char *str_hint_boneym = "I need to hit BONEY Ms from the side! If I hit them from the front, they'll counter-attack!";
+char *str_hint_barrel = "Some days you just can't get rid of a barrel... The explosions can still hurt me once it's gone!";
 
 void text_check_room()
 {
@@ -12,6 +13,7 @@ void text_check_room()
         case 1: p_text_current=str_hint_first; break;
         case 2: p_text_current=str_hint_wait; break;
         case 4: p_text_current=str_hint_boneym; break;
+        case 8: p_text_current=str_hint_barrel; break;
     
         default: textbox_state=TEXT_STATE_INACTIVE; break;
     }
@@ -75,25 +77,24 @@ void text_update()
     }
     
     
-    textbox_draw_char(char_current);
-    
-
-    text_x++;
-    text_copy_count++;
-
-    if (char_current=='\n')
+    switch (char_current)
     {
+    case '\n':
         text_y++;
         text_x=TEXTBOX_X;
-    }
-
-    if (char_current=='\0')
-    {
+        break;
+    
+    case '\0':
         text_copy_count=0;
         text_y++;
         text_y++;
         text_x=0;
         textbox_state=TEXT_STATE_INACTIVE;
+        break;
+    default:
+        textbox_draw_char(char_current);
+        text_x++;
+        break;
     }
-    
+    text_copy_count++;
 }
